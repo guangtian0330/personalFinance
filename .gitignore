@@ -1,0 +1,62 @@
+# Node, TypeScript and application build output
+node_modules/
+dist/
+build/
+out/
+*.tsbuildinfo
+.vite/
+.turbo/
+.cache/
+.npm/
+.pnpm-store/
+*.log
+
+# Test reports
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Local environment; only the exact example filename is allowed
+.env*
+!.env.example
+
+# Local SQLite / D1 / Wrangler state (SQL source migrations remain visible)
+.wrangler/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# Credentials and private keys
+.ssh/
+.aws/
+secrets/
+credentials.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# User-provided financial data and generated exports/backups
+/data/
+/imports/
+/exports/
+/backups/
+/private/
+/local-data/
+*.bak
+*.backup
+
+# OS and editor state
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
