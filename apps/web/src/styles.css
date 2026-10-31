@@ -1,0 +1,61 @@
+:root {
+  font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+  color: #17372e;
+  background: #f7f8f3;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a { color: inherit; }
+button { font: inherit; }
+.app-shell { max-width: 1240px; min-height: 100dvh; margin: 0 auto; padding: 0 64px; display: flex; flex-direction: column; }
+.site-header { min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid #dfe5dc; }
+.wordmark { display: inline-flex; align-items: center; gap: 12px; font-size: 25px; font-weight: 650; letter-spacing: -0.8px; text-decoration: none; }
+.brand-mark { width: 34px; height: 34px; color: #17624b; }
+.environment { font-size: 12px; letter-spacing: 0.08em; color: #54665d; padding: 8px 12px; background: #ecf0e8; border-radius: 6px; }
+main { flex: 1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.85fr); align-items: center; gap: 80px; padding: 92px 0 110px; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: #63786c; margin: 0; }
+h1 { font-weight: 500; font-size: clamp(40px, 4.5vw, 60px); line-height: 1.5; letter-spacing: -0.04em; margin: 24px 0; }
+.introduction { font-size: 15px; color: #5d6c62; line-height: 2; margin: 0; }
+.preview-note { display: flex; align-items: stretch; gap: 16px; margin-top: 48px; max-width: 375px; }
+.preview-note p { font-size: 12px; line-height: 1.9; color: #6b776e; margin: 0; }
+.note-line { width: 2px; flex-shrink: 0; background: #b8c8af; }
+.connection-card { padding: 34px; background: #fff; border: 1px solid #e2e7dc; border-radius: 18px; box-shadow: 0 14px 48px #28452f06; }
+.card-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.status-dot { width: 9px; height: 9px; border-radius: 50%; background: #819188; box-shadow: 0 0 0 5px #f1f3ef; }
+.connected .status-dot { background: #277753; box-shadow: 0 0 0 5px #edf5ee; }
+.unavailable .status-dot { background: #a45a33; box-shadow: 0 0 0 5px #faf0e9; }
+.connection-message { min-height: 152px; padding: 29px 0 24px; }
+h2 { font-size: 23px; font-weight: 550; line-height: 1.5; margin: 0 0 12px; }
+.connection-message p { font-size: 14px; line-height: 1.9; margin: 0; color: #66746c; }
+button { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; padding: 12px 18px; border: 0; border-radius: 8px; color: white; background: #17624b; cursor: pointer; font-size: 14px; }
+button:hover:not(:disabled) { background: #104c3a; }
+button:disabled { cursor: wait; background: #566e63; }
+button:focus-visible, a:focus-visible { outline: 3px solid #bd8b41; outline-offset: 5px; }
+.card-footnote { margin: 19px 0 0; font-size: 11px; line-height: 1.7; color: #738077; text-align: center; }
+footer { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid #dfe5dc; padding: 25px 0 28px; font-size: 11px; color: #738077; }
+
+@media (max-width: 800px) {
+  .app-shell { padding: 0 24px; }
+  .site-header { min-height: 86px; }
+  .wordmark { font-size: 22px; gap: 8px; }
+  .environment { font-size: 10px; padding: 7px 9px; }
+  main { grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 48px 0; }
+  h1 { font-size: 42px; margin: 18px 0; }
+  .introduction { font-size: 14px; }
+  .preview-note { margin-top: 28px; }
+  .connection-card { padding: 26px; }
+  .connection-message { min-height: 130px; }
+  footer { font-size: 10px; }
+}
+
+@media (max-width: 370px) {
+  .app-shell { padding: 0 18px; }
+  .desktop-break { display: none; }
+  h1 { font-size: 36px; }
+  .connection-card { padding: 22px; }
+}

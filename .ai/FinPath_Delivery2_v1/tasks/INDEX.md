@@ -71,7 +71,8 @@ no-push template text is superseded only within that grant.
 | Task | State | Evidence |
 |---|---|---|
 | M00-01 | Verified — 2026-10-30 | Explicit user authorization; Windows pnpm install/frozen lockfile, TypeScript build/typecheck and 7/7 focused checks passed; root `docs/PROJECT-STATUS.md` records details |
-| M00-02 | Planned / authorization required | Next suggested Step; not executed |
+| M00-02 | Verified locally — 2026-10-31 | Frozen install, build/typecheck, 15/15 tests and Chrome success/outage/recovery passed. Human UX gate pending. See root `docs/PROJECT-STATUS.md`. |
+| M00-03 | Planned / authorization required | Next suggested Step |
 
 All other Steps remain planned and require their own explicit authorization.
 

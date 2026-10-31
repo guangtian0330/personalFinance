@@ -4,14 +4,47 @@ Updated: 2026-10-31 (America/Toronto).
 
 ## Current stage
 
-- Task: `M00-01` — pnpm workspace and strict TypeScript.
-- State: Verified; explicitly authorized by the user on 2026-10-30.
-- Prerequisite: `M00-BOOTSTRAP-000` Verified; bootstrap changes were later
-  committed/pushed as `022cae4f5d04c4611791b515d8c8bb054354f58b`.
+- Task: `M00-02` — local React/Vite web and Hono API smoke.
+- Local state: Verified. Human UX gate `U@M00-02`: PENDING.
+- Prerequisite: M00-01 was verified and delivered in `ea5c7c9`. The QA policy
+  was delivered separately in `ae9901d`, the base of `codex/m00-02-web-api`.
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Next suggested task: `M00-02`, awaiting a new user instruction; not executed.
+- Next suggested task: `M00-03`, awaiting a new user instruction.
+
+## M00-02 verification and delivery evidence
+
+The user explicitly requested the next task in the Delivery2 index, then asked
+to resume it after interruption. On `codex/m00-02-web-api`, the Web and API
+packages now start together with `pnpm dev` or separately for failure testing.
+The API is a portable Hono Fetch handler with a loopback-only Node development
+adapter. Its local liveness response is documented in the README. The page
+checks the response body, bounds the request time and supports retry. This Step
+introduces no domain API, authentication, migration or storage changes.
+
+| B0 check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Observed result |
+| --- | --- |
+| `pnpm install --frozen-lockfile --offline --reporter=append-only` | Exit 0. All seven workspace projects resolved. Lockfile SHA-256 stayed `26A5108503F6AFCA190343F821E14222D9AD53008AF0B67F2CA3AA147432A7B6`. |
+| `pnpm typecheck` and `pnpm test` (includes `pnpm run build`) | Passed. Six composite packages typechecked and Vite produced a web bundle. All 15 Node tests passed (7 workspace, 3 API, 5 web). Zero skipped. |
+| `pnpm dev` and PowerShell `Invoke-WebRequest` to `/health` on ports 8787 and 5173 | Direct and proxied requests each returned HTTP 200 with `{"status":"ok","service":"finpath-api"}`. Both listeners used 127.0.0.1. |
+| Chrome desktop and 390×844 browser viewport | The page displayed **服务已连接** at both sizes. The narrow layout fit the viewport with the retry button visible. |
+| `pnpm dev:web` with API stopped, then `pnpm dev:api` and **重新检查** on the same page | Observed **暂时无法连接**, followed by **服务已连接** after retry. Automated browser evidence is reproducible with the [README smoke instructions](../README.md#run-the-local-web-app-and-api-m00-02). Local screenshots are in ignored `test-results/M00-02/`. |
+| Duplicate `pnpm dev` with API port already occupied | Expected exit 1. Original API still returned the health payload and the failed launch released port 5173. Final shared start and Ctrl+C cleanup verified both ports refused connections. |
+
+The first typecheck exposed missing Fetch declarations and a server-union type
+mismatch. The first suite run then exposed a workspace compiler probe resolving
+ambient types from the repo root. Fixes scoped the API types and corrected the
+test harness to use its package config path. Its internal dependency checks
+still require `workspace:*` and matching project references. The initial sandbox
+browser request hit a socket restriction. The successful browser trace used
+ordinary Windows loopback processes. There is no project lint/format command or
+CI workflow at this B0 gate. No active repository delivery hook was found.
+
+The human acceptance record is pending a reviewer, date, tested revision and
+outcome. It gates consuming UX work (including M01-05) and release. Delivery is
+one Step commit to `origin/codex/m00-02-web-api` with the SHA and observed CI
+reported after push. Pre-existing untracked Delivery2 material is excluded.
 
 ## QA milestone / Git policy authoring (documentation only)
 

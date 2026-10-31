@@ -19,7 +19,11 @@ function loadConfig(packagePath) {
   const configPath = path.join(root, packagePath, 'tsconfig.json');
   const result = ts.readConfigFile(configPath, ts.sys.readFile);
   assert.equal(result.error, undefined);
-  const config = ts.parseJsonConfigFileContent(result.config, ts.sys, path.dirname(configPath));
+  // Keep the real config path so ambient package types resolve from this
+  // workspace package rather than the test runner's repository-root cwd.
+  const config = ts.parseJsonConfigFileContent(
+    result.config, ts.sys, path.dirname(configPath), undefined, configPath,
+  );
   assert.deepEqual(config.errors, []);
   return config;
 }
@@ -47,6 +51,9 @@ test('M00-01: all workspace dependency imports resolve with matching project ref
     const config = loadConfig(packagePath);
     const references = new Set((config.projectReferences ?? []).map((ref) => path.resolve(ref.path)));
     for (const [name, version] of Object.entries(manifest.dependencies ?? {})) {
+      // Framework dependencies arrive in later Steps; this invariant concerns
+      // the internal workspace graph, not external registry packages.
+      if (!name.startsWith('@finpath/')) continue;
       assert.equal(version, 'workspace:*');
       const resolved = ts.resolveModuleName(
         name,

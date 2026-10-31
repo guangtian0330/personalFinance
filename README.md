@@ -16,28 +16,27 @@ desktop and WeChat mini program support are possible later targets.
 
 `M00-BOOTSTRAP-000` established the repository structure and working protocol.
 `M00-01` adds a pnpm workspace and strict TypeScript compilation for six packages.
-The entry modules are empty; there is no runnable web/API application, database
-schema or CI pipeline yet. See [project status](docs/PROJECT-STATUS.md) for evidence.
+`M00-02` adds a local React/Vite page that checks the Hono API and lets the
+developer retry when the service is unavailable. See [project status](docs/PROJECT-STATUS.md).
 
 The user designated [.ai/FinPath_Delivery2_v1](.ai/FinPath_Delivery2_v1/START-HERE.md)
 as the source for the delivered PRD, architecture, algorithms and 53-Step task
-order. Only `M00-01` is authorized in this session. Future tasks and proposed
-business decisions require their own approval.
+order. Each implementation Step requires its own authorization.
 
 ## Tentative technology direction
 
 The preferred stack is TypeScript in strict mode, React + Vite, Hono, Drizzle,
 SQLite-compatible Cloudflare D1, Zod, Vitest and Playwright. The intended
 architecture is a modular monolith with explicit contracts and a testable,
-platform-neutral domain core. This task establishes only the TypeScript/pnpm
-foundation; framework and infrastructure setup belong to later authorized tasks.
+platform-neutral domain core. The local Hono app exposes a Fetch handler. A
+separate Node adapter starts the development listener on Windows.
 Tauri and Taro may be evaluated for later platforms.
 
 ## Repository structure
 
 ```text
-apps/web/               Future responsive web application
-apps/api/               Future API adapter
+apps/web/               React/Vite web app and connectivity checks
+apps/api/               Hono health route, local listener and route tests
 packages/core/         Future platform-neutral domain logic
 packages/contracts/    Future shared contracts and validation
 packages/persistence/  Future persistence adapters
@@ -82,24 +81,47 @@ pnpm build
 pnpm test
 ```
 
-`typecheck` and `build` both run the composite TypeScript compiler. They emit
-JavaScript, declarations and incremental metadata into each package's ignored
-`dist/` directory so references work from a fresh checkout. This is compilation,
-not an application bundle or deployment. `test` builds its prerequisites and runs
-the focused M00-01 checks with Node's test runner, including negative type cases.
-Lint/format tooling, Vitest, Playwright and CI belong to M00-05 and are not set up.
+`typecheck` compiles the six TypeScript projects into their ignored `dist/`
+directories. `build` also writes the web bundle to `apps/web/build/`. `test`
+builds first, then runs workspace, API route and web connectivity checks with
+Node's test runner. The lint/format, Vitest, Playwright and CI setup is planned
+for M00-05.
 
 Workspace dependencies use `workspace:*` and matching TypeScript references.
 The core package has no dependencies, browser globals or Node ambient types.
-Only web/UI packages opt into DOM types. See
+Web/UI use DOM types for rendering. The API enables Fetch/Web API declarations
+needed by Hono and Node types for its local listener. See
 [pnpm workspaces](https://pnpm.io/workspaces) and
 [TypeScript project references](https://www.typescriptlang.org/docs/handbook/project-references.html).
+
+## Run the local web app and API (M00-02)
+
+From the repository root in PowerShell, run `pnpm dev` to start both services.
+Open [FinPath in the browser](http://127.0.0.1:5173/). The connection card
+should show **服务已连接**. Vite forwards the browser's same-origin `/health`
+request to the API on loopback port 8787. To check both paths in another shell:
+
+```powershell
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8787/health).Content
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:5173/health).Content
+```
+
+Both return HTTP 200 and `{"status":"ok","service":"finpath-api"}`. Press
+`Ctrl+C` in the launching shell to stop the pair. If either port is occupied,
+check which service owns it before starting FinPath.
+
+To check failure and recovery, start `pnpm dev:web` and `pnpm dev:api` in two
+separate PowerShell terminals instead of using the shared launcher. With the
+page open, press `Ctrl+C` in the API terminal, then choose **重新检查**. Expect
+**暂时无法连接**. Run `pnpm dev:api` again and choose **重新检查** on the same
+page. Expect **服务已连接**. Stop both commands with `Ctrl+C`. Human reviewers
+record the revision, date, browser and outcome in the M00-02 UX checklist.
 
 ## Resuming work
 
 Read [AGENTS.md](AGENTS.md), [project status](docs/PROJECT-STATUS.md) and the
 [delivery task index](.ai/FinPath_Delivery2_v1/tasks/INDEX.md). The next suggested
-task is `M00-02`; request it explicitly in a fresh session. Read only its required
+task is `M00-03`; request it explicitly in a fresh session. Read only its required
 sources and relevant code. A delivered file is not permission to execute it.
 
 The local project remains at `D:\myWORK\project\finpath`. A separate Windows

@@ -9,9 +9,12 @@
     "pnpm": "11.25.0"
   },
   "scripts": {
-    "build": "tsc --build",
+    "dev": "pnpm --parallel --filter @finpath/api --filter @finpath/web run dev",
+    "dev:api": "pnpm --filter @finpath/api dev",
+    "dev:web": "pnpm --filter @finpath/web dev",
+    "build": "tsc --build && pnpm --filter @finpath/web build",
     "typecheck": "tsc --build",
-    "test": "pnpm run build && node --test tests/M00-01.workspace.test.mjs"
+    "test": "pnpm run build && node --test tests/M00-01.workspace.test.mjs apps/api/tests/M00-02.health.test.mjs apps/web/tests/M00-02.api-health.test.mjs"
   },
   "devDependencies": {
     "typescript": "6.0.3"
