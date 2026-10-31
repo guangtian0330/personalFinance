@@ -1,0 +1,57 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  apps/api:
+    dependencies:
+      '@finpath/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@finpath/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@finpath/persistence':
+        specifier: workspace:*
+        version: link:../../packages/persistence
+
+  apps/web:
+    dependencies:
+      '@finpath/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@finpath/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+
+  packages/contracts: {}
+
+  packages/core: {}
+
+  packages/persistence:
+    dependencies:
+      '@finpath/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/ui: {}
+
+packages:
+
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+snapshots:
+
+  typescript@6.0.3: {}

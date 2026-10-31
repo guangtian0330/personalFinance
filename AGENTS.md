@@ -6,15 +6,18 @@
 - A human-approved PRD governs product behavior; approved architecture and ADRs
   govern technical choices; module contracts govern interfaces. The approved
   Step limits edit scope and cannot silently override any higher-level rule.
-- The current product plan and 53-step roadmap are draft proposals. Formal PRD,
-  architecture, algorithms and executable Steps are pending. Do not infer approval
-  from a directory, draft, preferred stack or milestone name.
+- The delivered PRD, architecture, algorithms and 53-Step index live in
+  `.ai/FinPath_Delivery2_v1/`, the user-designated source for subsequent tasks.
+  Resolve a delivery Step's `docs/...` and `tasks/...` links within that directory.
+  Read its `AGENTS.ADDENDUM.md` with this protocol. Only an explicitly requested
+  Step is authorized; the rest of the baseline remains proposed. Do not infer
+  blanket product approval from the delivery or a milestone name.
 - Read this file, the explicitly requested Step, its referenced contracts,
   architecture/algorithm documents, then directly relevant code and tests. Read
   the full PRD only to resolve ambiguity or conflict.
-- Maintain requirements in `docs/requirements/`, architecture in
-  `docs/architecture/`, algorithms in `docs/algorithms/`, immutable dated ADRs in
-  `docs/decisions/`, Steps in `tasks/`, and progress in `docs/PROJECT-STATUS.md`.
+- Maintain specifications and Step order in the delivery's `docs/` and `tasks/`
+  directories. Keep progress in root `docs/PROJECT-STATUS.md` and navigation in
+  root `tasks/README.md`; avoid duplicate authoritative specification copies.
 
 ## One approved Step per session
 

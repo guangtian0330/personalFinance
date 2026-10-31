@@ -1,0 +1,11 @@
+{
+  "name": "@finpath/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@finpath/core": "workspace:*",
+    "@finpath/contracts": "workspace:*",
+    "@finpath/persistence": "workspace:*"
+  }
+}
