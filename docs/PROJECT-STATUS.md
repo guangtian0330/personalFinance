@@ -1,6 +1,6 @@
 # FinPath project status
 
-Updated: 2026-10-30 (America/Toronto).
+Updated: 2026-10-31 (America/Toronto).
 
 ## Current stage
 
@@ -12,6 +12,71 @@ Updated: 2026-10-30 (America/Toronto).
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
 - Next suggested task: `M00-02`, awaiting a new user instruction; not executed.
+
+## QA milestone / Git policy authoring (documentation only)
+
+- Authorization: user invoked `.ai/FinPath_QA_Milestones_Codex_Prompt.md` after
+  separately delivering M00-01. This is not an M00–M09 implementation Step.
+- Precondition confirmed at task start: local HEAD and `origin/codex/m00-01-workspace` both
+  resolve to M00-01 commit `ea5c7c9dd0ad0a4018c1d3c6323790d383f20468`;
+  no tracked/staged implementation changes remained. Existing unrelated
+  untracked Delivery2 material and ZIP are preserved/accounted for.
+- State: Verified locally on 2026-10-31; documentation checks and policy review
+  passed. Git delivery and remote CI are reported separately after this commit.
+- Outputs: root `docs/testing/TEST-MILESTONES.md`, `TASK-TEST-MATRIX.md`,
+  `QA-EXECUTION-RULES.md`; minimal navigation/Git-policy reconciliation in root
+  AGENTS and the existing Delivery2 addendum, strategy, roadmap and task index.
+- Source review: 27 tasks M00–M04 and 26 tasks M05–M09, restricted to dependencies,
+  permissible surfaces, acceptance and testing sections. Two read-only reviewers
+  assisted; one integrator writes files. No application code/PRD bulk loading.
+- Coverage verified: 53/53 distinct actual IDs; all 56 internal dependency edges
+  match the index, manifest and Step sections and are acyclic. Bootstrap remains
+  M00-01's external prerequisite despite manifest `[]`. All 111 source-document
+  references exist locally. Fourteen milestone gates, eight human checklists and
+  IT-001 through IT-008 are mapped without marking future work complete.
+- Documentation audit: a PowerShell here-string piped to
+  `node --input-type=module` checked IDs/order/columns, prerequisites, gates,
+  source existence, 146 local Markdown links and two anchors, final newlines,
+  trailing whitespace and sensitive-content patterns; exit 0. The only initial
+  email-pattern hit was the existing GitHub SSH remote, reviewed and excluded.
+- `git diff --check` passed. Read-only comparison against the supplied ZIP found
+  all 52 newly versioned Step sources unchanged; M00-01 is unchanged from HEAD.
+  No application code, dependency/lockfile, schema, API or financial behavior
+  changed. The staged audit covers 69 documentation paths and their versioned
+  link targets. Its first cached-diff check found an extra blank line at the
+  matrix EOF; that formatting issue was removed before the required rerun.
+- Final policy review resolved the M00-05 ordering: local checks and workflow
+  review precede commit/push; exact-SHA remote CI follows push and blocks
+  milestone closure / dependent Steps until successful. AGENTS/addendum, matrix,
+  strategy and roadmap use this same distinction. Late-task review also made
+  weight-sum, zero-versus-unknown income and staging mock rejection explicit.
+- The commit includes only the nine authored policy/status documents and their
+  previously untracked direct source/link targets (52 unchanged Step files,
+  manifest, QA request and six architecture/algorithm/test/decision sources).
+  This preserves versioned Markdown navigation without importing the whole ZIP.
+  Nine indirect Step source documents remain present locally but untracked;
+  they require deliberate delivery before a clean clone can execute those Steps.
+  Other pre-existing untracked package material is preserved and excluded.
+- No repository workflow or active Git hook is configured at this baseline;
+  no known automatic deployment trigger was found. External integration/webhook
+  settings are not visible in this local inspection. No human product acceptance
+  is claimed by this documentation verification.
+- Local tests and Git delivery are separate from human/remote-CI approval.
+  Future successfully verified Steps now have standing ordinary commit/push
+  authorization. No automatic next Step, force-push, merge, PR, tag, release,
+  deployment or cloud resources. Scope/release/security gates remain unchanged.
+- Source limitations are recorded centrally: phased IT-001, incomplete opening
+  fixture/withdrawal policy, proposed product coefficients/cap/risk thresholds,
+  M07 import/export timing, M08 staging availability and M09 performance limits.
+  Future owners resolve them before dependent implementation; no invented values.
+- No implementation Step was rerun, completed or newly marked Verified. M00-01
+  remains the last verified implementation; M00-02 onward remain unexecuted.
+- No application test/build/lint command is required or run for this docs-only
+  assignment. Validation is document links/anchors, 53-ID coverage/dependencies,
+  status/policy consistency, source preservation, diff and staged-secret review.
+- Delivery target: one separate documentation commit on
+  `codex/m00-01-workspace`, then ordinary push to its authorized origin branch.
+  Record actual commit SHA, push and remote CI results in the post-commit report.
 
 ## M00-01 delivery and evidence
 

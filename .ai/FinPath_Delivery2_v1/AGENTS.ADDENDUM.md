@@ -2,10 +2,18 @@
 
 This addendum complements the existing repository `AGENTS.md` created by M00-BOOTSTRAP-000. Review conflicts before merging.
 
+Git-policy update (2026-10-30): the user explicitly authorized ordinary commit
+and push after every successfully verified Step. Follow root
+[QA-EXECUTION-RULES](../../docs/testing/QA-EXECUTION-RULES.md), the Step's own
+[test-matrix row](../../docs/testing/TASK-TEST-MATRIX.md) and
+[milestone gate](../../docs/testing/TEST-MILESTONES.md). This supersedes older
+generic no-automatic-push language in this delivery's task templates, not any
+product approval, authorization, migration or deployment restriction.
+
 ## Execution gate
 - Exactly **one authorized Step per user turn**. A step is identified by `tasks/Mxx/Mxx-yy.md`.
 - Load the current Step and only its `Source docs`/code/tests; do NOT preload full PRD or all tasks.
-- No automatic transition to the next Step, no automatic Git push, production deployment, live credentials, cloud services or real personal financial data.
+- No automatic transition to the next Step; bare "continue" after completion is insufficient. Verified Step commit/push follows the standing user grant. No automatic merge, PR, tag, release, deployment, live credentials, cloud services or real personal financial data.
 - If a requirement is unapproved or conflicts with the code, return an issue/ADR proposal instead of silently changing fundamental architecture.
 - Do not rerun M00-BOOTSTRAP-000; inspect and reuse existing repo, branch, status, files, and commits.
 
@@ -23,11 +31,11 @@ This addendum complements the existing repository `AGENTS.md` created by M00-BOO
 1. Inspect git status, requested task ID, dependencies, touched files.
 2. Plan smallest change and checks.
 3. Implement scope only, with associated tests and schema/contract documentation when needed.
-4. Run available format/lint/typecheck/unit, and integration/e2e tests when affected and available; report NOT RUN honestly.
+4. Run the matrix's actual required local/regression checks and report unavailable/failed/skipped/flaky checks honestly; required failures block delivery. Distinguish future pre-harness tooling from missing required verification.
 5. Review changed files and diff for sensitive data.
-6. Update existing `docs/PROJECT-STATUS.md` and task completion markers, preserve user edits.
-7. Report changes, commands, test results, remaining issues, next suggested Step; STOP.
-8. Commit only when task/user explicitly authorizes, never push automatically.
+6. Update root `docs/PROJECT-STATUS.md` and task completion markers in the same task commit, preserving user edits and separate local/CI/manual states.
+7. After required local/review gates pass, commit task-owned paths and push the current authorized branch under the standing request. Preserve failed-push SHA; inspect exact-SHA CI after push before milestone closure / next Step. No force-push, merge, PR or deployment.
+8. Report commands/results, commit SHA, push/CI/manual status, remaining issues and next suggested Step; STOP. No automatic next Step.
 
 ## Parallelism
 - Default serial, one implementation agent; single integrator on main.

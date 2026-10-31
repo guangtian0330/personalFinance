@@ -13,11 +13,18 @@
   Step is authorized; the rest of the baseline remains proposed. Do not infer
   blanket product approval from the delivery or a milestone name.
 - Read this file, the explicitly requested Step, its referenced contracts,
-  architecture/algorithm documents, then directly relevant code and tests. Read
-  the full PRD only to resolve ambiguity or conflict.
+  architecture/algorithm documents, its own row in
+  [TASK-TEST-MATRIX](docs/testing/TASK-TEST-MATRIX.md) and applicable
+  [TEST-MILESTONES](docs/testing/TEST-MILESTONES.md), then directly relevant code
+  and tests. Read the full PRD only to resolve ambiguity or conflict.
 - Maintain specifications and Step order in the delivery's `docs/` and `tasks/`
   directories. Keep progress in root `docs/PROJECT-STATUS.md` and navigation in
   root `tasks/README.md`; avoid duplicate authoritative specification copies.
+- [QA-EXECUTION-RULES](docs/testing/QA-EXECUTION-RULES.md) is the canonical local
+  gate, evidence, human-review and Git-delivery protocol. The user's 2026-10-30
+  standing authorization supersedes generic no-push/fresh-permission wording in
+  older Delivery2 templates/addendum/bootstrap instructions only for ordinary
+  verified Step delivery. Product, security and release restrictions still apply.
 
 ## One approved Step per session
 
@@ -29,16 +36,26 @@
    unrelated refactors. Contract and DB migration changes require their own
    explicit review/checkpoint.
 5. Run relevant formatting, lint, type checks and unit tests when available.
-   Run integration/E2E checks for affected cross-module flows. State unavailable
-   checks honestly; a green unit suite alone does not verify integration.
+   Apply the matrix's risk-based integration/E2E/security/load/restore gates.
+   Distinguish pre-M00-05 future tooling from missing required checks; failed,
+   skipped, flaky or unavailable required checks block delivery. A green unit
+   suite alone does not verify integration. Use synthetic data only.
 6. Inspect diffs and staged/untracked filenames for secrets, real data, unsafe
    migrations, regressions and unexpected changes. Stage only task-owned files.
-7. After verification, update project status and the task index. Report changed
-   files, behavior, commands/results, contracts, limitations, blockers and the
-   suggested next Step. Distinguish planned work from verified results.
-8. Commit only on user request or explicit authorization in the current Step.
-   Never push, create a PR, publish or deploy automatically.
-9. STOP. A new explicit user instruction is required for another Step.
+7. After verification, include project status and task markers in the same task
+   commit. Keep local verification, delivery, CI and human acceptance separate;
+   never invent human signoff or embed a commit's own unknown SHA in its contents.
+8. Under the standing user request, every successfully verified Step ends with
+   one logical task commit and an ordinary push to its current authorized remote
+   branch. Stage explicit task-owned paths; inspect the staged diff and secrets.
+   No commit/push on required local check failure. Preserve the local SHA on push
+   failure; retry the same delivery, not duplicate implementation/commits. Check
+   required remote CI after push for that SHA; failures/pending required CI block
+   milestone closure and the next Step, not creation of the initial commit.
+   No automatic force-push, merge, PR, tag, release, deployment or cloud resources.
+9. Report changed files, behavior, commands/results, contracts, commit SHA,
+   remote branch/push, CI/manual status, limitations and next suggested Step.
+   STOP. A new explicit Step instruction is required; bare "continue" is not one.
 
 Each future Step must declare: `taskId`, `milestone`, `goal`, `requirements`,
 `prerequisites`, `sourceDocs`, `allowedFiles`, `protectedFiles`, `inputs`,

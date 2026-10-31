@@ -2,6 +2,14 @@
 
 **One Step per Codex session**, explicitly authorized by user. Previous M00-BOOTSTRAP-000 is complete and not part of the 53.
 
+Read only the requested row, its Step/source docs and its
+[central QA row](../../../docs/testing/TASK-TEST-MATRIX.md). Apply the
+[milestone gates](../../../docs/testing/TEST-MILESTONES.md) and
+[execution/delivery rules](../../../docs/testing/QA-EXECUTION-RULES.md).
+The standing user grant covers ordinary commit/push after verification; it
+does not authorize the next Step, merge, PR, tag or deployment. Older generic
+no-push template text is superseded only within that grant.
+
 | Task | Purpose | Prerequisites | Parallel allowed? |
 |---|---|---|---|
 | [M00-01](M00/M00-01.md) | Initialize pnpm workspace and strict TypeScript | M00-BOOTSTRAP-000 | No |
