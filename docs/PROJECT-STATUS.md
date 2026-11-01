@@ -4,14 +4,83 @@ Updated: 2026-10-31 (America/Toronto).
 
 ## Current stage
 
-- Task: `M00-02` — local React/Vite web and Hono API smoke.
-- Local state: Verified. Human UX gate `U@M00-02`: PENDING.
-- Prerequisite: M00-01 was verified and delivered in `ea5c7c9`. The QA policy
-  was delivered separately in `ae9901d`, the base of `codex/m00-02-web-api`.
+- Task: `M00-03` — shared Zod contracts, typed errors and versioned health client.
+- Local state: Verified; implementation checks passed and human contract review
+  `R@M00-03` APPROVED by the repository user on 2026-10-31.
+- Prerequisite: M00-02 was verified and pushed as
+  `e474cd6cb04d1e3a52ca8243b089649171512a1c` on `origin/codex/m00-02-web-api`.
+  Its exact-SHA status/check/workflow lists were empty before CI setup (M00-05).
+  Human UX gate `U@M00-02` remains PENDING; it does not block this non-UX Step.
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Next suggested task: `M00-03`, awaiting a new user instruction.
+- Git delivery: this logical task commit includes the approval record; actual
+  SHA, push and exact-SHA CI results are reported after delivery.
+- Next suggested task after delivery: `M00-04`, not authorized or executed.
+
+## M00-03 verification and approved contract
+
+Authorization: the user's explicit next-task instruction on 2026-10-31 selects
+M00-03 from Delivery2. Branch: `codex/m00-03-contracts`, based on the M00-02 SHA
+above. There were no tracked edits on entry; unrelated untracked Delivery2
+sources and the ZIP are preserved. Verification applies to the task implementation
+diff against that base; the approval follow-up changes documentation only.
+
+The approved scope is the
+[M00-03 foundation contract](../.ai/FinPath_Delivery2_v1/docs/architecture/API.md#m00-03-foundation-contract):
+GET `/api/v1/health`, stateless POST `/api/v1/health/check` with exactly
+`{"check":"health"}`, existing GET `/health` compatibility, strict versioned
+query/body validation and stable 400/404/500 errors. All success bodies remain
+`{"status":"ok","service":"finpath-api"}`. Error details are empty; request
+IDs are server-generated UUIDs, and no input/exception/stack is returned.
+
+Changed surfaces: contracts schemas/types, exact Zod dependency/lock, package
+type declarations, Hono error/validation boundary, Web typed adapter, Vite proxy,
+root dev/test scripts, focused synthetic fixtures/tests, API documentation and
+task/status/navigation records. Existing web timeout/retry UI and legacy health
+behavior remain. No domain/authentication/storage/DB migration is introduced.
+
+| B0 / L0-L2 check (Windows PowerShell; Node 24.22.1, pnpm 11.25.0, TypeScript 6.0.3) | Observed result |
+| --- | --- |
+| `pnpm install --reporter=append-only` | Exit 0; added only pinned Zod 4.6.7 from the npm registry. |
+| `pnpm install --frozen-lockfile --offline --reporter=append-only` | Exit 0; lock SHA-256 unchanged: `303B48EABDB1EF7BC555E538BE6116EDD5DCA3D45C60E9570CF4FD7FFFC7075A`. |
+| `pnpm typecheck` | Exit 0; all six composite packages compile. |
+| `pnpm test` (includes `pnpm run build`) | Exit 0; 33/33 Node tests passed, zero failed/skipped/cancelled. Includes the prior 15 tests and 18 M00-03 tests. Vite production bundle built. |
+| In-memory compiler probes under API and Web settings | Valid Zod-inferred request/response/error types compile; three wrong literal assignments per consumer are rejected. Core platform-isolation regressions still pass. |
+| Hono/client integration and schema fixtures | Valid GET/POST, malformed/empty/wrong/unknown body input, media type, repeated/empty query names, typed 404/500, fresh request IDs, sanitized errors and cancellation during body reading passed. |
+| `pnpm exec tsc --build --clean` followed by `pnpm dev` | Exit 0 for clean; root dev preflight regenerated contracts, then both loopback listeners started without other compiled packages. |
+| PowerShell here-string piped to `node --input-type=module`, using real `fetch` | 14/14 assertions passed across 8787 (direct) and 5173 (Vite proxy): legacy/versioned GET, valid/invalid POST, malformed JSON, empty query name and typed 404. |
+| Chrome at `http://127.0.0.1:5173/` | Displayed **服务已连接** using the new client/proxy. Local screenshot: ignored `test-results/M00-03/connected.jpg`. This automated check is not human UX signoff. |
+| Ctrl+C for the owned shared launcher; `pnpm build` after the clean-output check | No listeners remain on 5173/8787; build exit 0 restored all compiler output and produced the web bundle. |
+| Task diff / documentation audit | `git diff --check` passed. A PowerShell/Node audit checked all 21 task-owned files, 74 local Markdown links and five anchors, final newlines, trailing whitespace and credential patterns; no findings. New file contents and the dependency lock change were also reviewed. |
+
+The first typecheck failed because Zod's declarations reference the standard
+`URL` type. Contracts now enables DOM declarations locally; root/core ambient
+types remain unchanged. Two read-only review findings were fixed before the
+passing tests: router helpers dropped empty query names, and JSON decoding hid
+body-read cancellation. Explicit negative tests now cover both. No failure was
+waived. Lint/format, Vitest, Playwright harness and remote CI are
+`NOT_APPLICABLE_YET` before their M00-05 setup; real Node/HTTP/browser checks
+provide the required B0 evidence. No production or cloud environment was used.
+Final documentation review clarified that version-prefix query validation runs
+before route resolution. The focused API suite was rerun after adding that
+boundary assertion; all seven tests passed.
+
+Manual gate: [matrix M00-03](testing/TASK-TEST-MATRIX.md) requires **R: contract
+checkpoint**, and [QA rules](testing/QA-EXECUTION-RULES.md#evidence-and-human-review)
+require concrete review before Verified/delivery. Reviewer: repository user.
+Date: 2026-10-31 (America/Toronto). Result: **APPROVED**. Evidence: the user replied
+"评审通过 批准" after the concrete contract and verification report. This approval
+covers the M00-03 routes, strict request/response validation, typed errors, empty
+details, request IDs and compatibility behavior documented above. It does not
+approve future business contracts or satisfy the separate M00-02 UX checklist.
+
+Git delivery: all required local/review gates passed. The delivery target is
+`origin/codex/m00-03-contracts`, one logical Step commit under standing
+authorization. The API source was already present
+but untracked; only this required, reviewed source is added to task ownership.
+Other untracked source documents and the ZIP remain excluded. Remote CI status
+for M00-03 cannot be claimed before a pushed commit exists. M00-04 was not run.
 
 ## M00-02 verification and delivery evidence
 

@@ -9,12 +9,13 @@
     "pnpm": "11.25.0"
   },
   "scripts": {
-    "dev": "pnpm --parallel --filter @finpath/api --filter @finpath/web run dev",
-    "dev:api": "pnpm --filter @finpath/api dev",
-    "dev:web": "pnpm --filter @finpath/web dev",
+    "dev": "pnpm build:contracts && pnpm --parallel --filter @finpath/api --filter @finpath/web run dev",
+    "dev:api": "pnpm build:contracts && pnpm --filter @finpath/api dev",
+    "dev:web": "pnpm build:contracts && pnpm --filter @finpath/web dev",
+    "build:contracts": "tsc --build packages/contracts",
     "build": "tsc --build && pnpm --filter @finpath/web build",
     "typecheck": "tsc --build",
-    "test": "pnpm run build && node --test tests/M00-01.workspace.test.mjs apps/api/tests/M00-02.health.test.mjs apps/web/tests/M00-02.api-health.test.mjs"
+    "test": "pnpm run build && node --test tests/M00-01.workspace.test.mjs apps/api/tests/M00-02.health.test.mjs apps/web/tests/M00-02.api-health.test.mjs packages/contracts/tests/M00-03.contracts.test.mjs apps/api/tests/M00-03.errors.test.mjs apps/web/tests/M00-03.client.test.mjs"
   },
   "devDependencies": {
     "typescript": "6.0.3"

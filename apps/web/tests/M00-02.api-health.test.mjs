@@ -4,7 +4,7 @@ import { checkApiHealth } from '../dist/api-health.js';
 
 test('M00-02: web accepts the API health payload via a fresh same-origin request', async () => {
   await checkApiHealth(undefined, async (url, options) => {
-    assert.equal(url, '/health');
+    assert.equal(url, '/api/v1/health');
     assert.equal(options.cache, 'no-store');
     assert.ok(options.signal instanceof AbortSignal);
     return Response.json({ status: 'ok', service: 'finpath-api' });

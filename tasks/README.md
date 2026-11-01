@@ -7,7 +7,7 @@
 | `M00-BOOTSTRAP-000` | Verified | Authorized by the user's master-prompt request; skeleton and documentation checks passed; see project status |
 | `M00-01` | Verified | Authorized 2026-10-30; Windows install, frozen lockfile, compile and 7/7 focused tests passed |
 | `M00-02` | Verified locally | Windows shared startup, 15/15 tests and real browser outage/retry passed. Human UX review pending. |
-| `M00-03` | Proposed | Next in Delivery2's index. Requires a new user instruction. |
+| `M00-03` | Verified locally | Implementation checks passed; user explicitly approved the concrete API contract on 2026-10-31. Git delivery/CI are reported separately. |
 
 The user designated [Delivery2's task index](../.ai/FinPath_Delivery2_v1/tasks/INDEX.md)
 as the source of task order and dependencies. Execute only the explicitly

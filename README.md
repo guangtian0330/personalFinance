@@ -18,6 +18,8 @@ desktop and WeChat mini program support are possible later targets.
 `M00-01` adds a pnpm workspace and strict TypeScript compilation for six packages.
 `M00-02` adds a local React/Vite page that checks the Hono API and lets the
 developer retry when the service is unavailable. See [project status](docs/PROJECT-STATUS.md).
+`M00-03` adds shared Zod contracts, versioned health requests and typed errors;
+implementation checks and the human contract review passed on 2026-10-31.
 
 The user designated [.ai/FinPath_Delivery2_v1](.ai/FinPath_Delivery2_v1/START-HERE.md)
 as the source for the delivered PRD, architecture, algorithms and 53-Step task
@@ -38,7 +40,7 @@ Tauri and Taro may be evaluated for later platforms.
 apps/web/               React/Vite web app and connectivity checks
 apps/api/               Hono health route, local listener and route tests
 packages/core/         Future platform-neutral domain logic
-packages/contracts/    Future shared contracts and validation
+packages/contracts/    Shared Zod health/error contracts and validation
 packages/persistence/  Future persistence adapters
 packages/ui/           Future shared UI components
 .ai/FinPath_Delivery2_v1/docs/   Delivered specifications and proposed decisions
@@ -84,7 +86,8 @@ pnpm test
 `typecheck` compiles the six TypeScript projects into their ignored `dist/`
 directories. `build` also writes the web bundle to `apps/web/build/`. `test`
 builds first, then runs workspace, API route and web connectivity checks with
-Node's test runner. The lint/format, Vitest, Playwright and CI setup is planned
+Node's test runner, including M00-03 contract fixtures and inferred-type probes.
+The lint/format, Vitest, Playwright and CI setup is planned
 for M00-05.
 
 Workspace dependencies use `workspace:*` and matching TypeScript references.
@@ -93,22 +96,30 @@ Web/UI use DOM types for rendering. The API enables Fetch/Web API declarations
 needed by Hono and Node types for its local listener. See
 [pnpm workspaces](https://pnpm.io/workspaces) and
 [TypeScript project references](https://www.typescriptlang.org/docs/handbook/project-references.html).
+The contracts package enables DOM declarations for the standard `URL` type used
+in Zod's declarations; it uses no browser-only runtime APIs. Core stays isolated.
 
 ## Run the local web app and API (M00-02)
 
 From the repository root in PowerShell, run `pnpm dev` to start both services.
+The root dev commands build shared contracts before starting either service.
 Open [FinPath in the browser](http://127.0.0.1:5173/). The connection card
-should show **服务已连接**. Vite forwards the browser's same-origin `/health`
+should show **服务已连接**. Vite forwards the browser's same-origin `/api/v1/health`
 request to the API on loopback port 8787. To check both paths in another shell:
 
 ```powershell
-(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8787/health).Content
-(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:5173/health).Content
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8787/api/v1/health).Content
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:5173/api/v1/health).Content
 ```
 
 Both return HTTP 200 and `{"status":"ok","service":"finpath-api"}`. Press
 `Ctrl+C` in the launching shell to stop the pair. If either port is occupied,
 check which service owns it before starting FinPath.
+The original `/health` path remains available. The stateless
+`POST /api/v1/health/check` example accepts JSON `{"check":"health"}`;
+invalid bodies or unknown query fields return typed 400 errors. See the
+[approved M00-03 contract](.ai/FinPath_Delivery2_v1/docs/architecture/API.md#m00-03-foundation-contract)
+for exact shapes, error codes and compatibility rules.
 
 To check failure and recovery, start `pnpm dev:web` and `pnpm dev:api` in two
 separate PowerShell terminals instead of using the shared launcher. With the
@@ -120,9 +131,10 @@ record the revision, date, browser and outcome in the M00-02 UX checklist.
 ## Resuming work
 
 Read [AGENTS.md](AGENTS.md), [project status](docs/PROJECT-STATUS.md) and the
-[delivery task index](.ai/FinPath_Delivery2_v1/tasks/INDEX.md). The next suggested
-task is `M00-03`; request it explicitly in a fresh session. Read only its required
-sources and relevant code. A delivered file is not permission to execute it.
+[delivery task index](.ai/FinPath_Delivery2_v1/tasks/INDEX.md). M00-03 is locally
+Verified with its contract approved. After its Git delivery and CI check,
+the next suggested task is `M00-04`, requiring a new instruction. Read only the
+current task's required sources and code. A delivered file is not permission to execute it.
 
 The local project remains at `D:\myWORK\project\finpath`. A separate Windows
 environment task configured fnm's persistent default as Node 24.22.1 and pnpm

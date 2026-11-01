@@ -6,6 +6,7 @@ const localServer = {
   strictPort: true,
   proxy: {
     '/health': { target: 'http://127.0.0.1:8787' },
+    '/api/v1': { target: 'http://127.0.0.1:8787' },
   },
 };
 
