@@ -1,6 +1,6 @@
 # FinPath project status
 
-Updated: 2026-10-31 (America/Toronto).
+Updated: 2026-11-01 (America/Toronto).
 
 ## Current stage
 
@@ -10,13 +10,15 @@ Updated: 2026-10-31 (America/Toronto).
 - Prerequisite: M00-02 was verified and pushed as
   `e474cd6cb04d1e3a52ca8243b089649171512a1c` on `origin/codex/m00-02-web-api`.
   Its exact-SHA status/check/workflow lists were empty before CI setup (M00-05).
-  Human UX gate `U@M00-02` remains PENDING; it does not block this non-UX Step.
+  Human UX gate `U@M00-02`: PASS, explicitly confirmed by the user on 2026-10-31.
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Git delivery: this logical task commit includes the approval record; actual
-  SHA, push and exact-SHA CI results are reported after delivery.
-- Next suggested task after delivery: `M00-04`, not authorized or executed.
+- Git delivery: M00-03 commit `04113e98f9b7b7ce2c573feb879f0db1372db1fe` was
+  pushed to `origin/codex/m00-03-contracts`; remote and local SHA matched.
+  Exact-SHA status contexts, check runs and workflow runs were empty:
+  `PUSHED_CI_NOT_CONFIGURED`, as expected before M00-05.
+- Next suggested task: `M00-04`, not authorized or executed.
 
 ## M00-03 verification and approved contract
 
@@ -79,8 +81,9 @@ Git delivery: all required local/review gates passed. The delivery target is
 `origin/codex/m00-03-contracts`, one logical Step commit under standing
 authorization. The API source was already present
 but untracked; only this required, reviewed source is added to task ownership.
-Other untracked source documents and the ZIP remain excluded. Remote CI status
-for M00-03 cannot be claimed before a pushed commit exists. M00-04 was not run.
+Other untracked source documents and the ZIP remain excluded. Delivery completed
+as `04113e98f9b7b7ce2c573feb879f0db1372db1fe`; exact-SHA CI was not configured,
+as recorded above. M00-04 was not run.
 
 ## M00-02 verification and delivery evidence
 
@@ -110,10 +113,28 @@ browser request hit a socket restriction. The successful browser trace used
 ordinary Windows loopback processes. There is no project lint/format command or
 CI workflow at this B0 gate. No active repository delivery hook was found.
 
-The human acceptance record is pending a reviewer, date, tested revision and
-outcome. It gates consuming UX work (including M01-05) and release. Delivery is
-one Step commit to `origin/codex/m00-02-web-api` with the SHA and observed CI
-reported after push. Pre-existing untracked Delivery2 material is excluded.
+### M00-02 human UX acceptance
+
+- Gate: `U@M00-02` — **PASS**. Reviewer: repository user. Confirmation received
+  on 2026-10-31 (America/Toronto), in this conversation.
+- Evidence: the user's explicit statement, "M00-02 人工 UX 验收通过".
+- Accepted scope: the delivered M00-02 local dev-smoke UX described by the
+  [human checklist](testing/TEST-MILESTONES.md#humanmanual-acceptance-checklists):
+  launch, connection feedback, understandable outage feedback and recovery.
+- Artifact reference: M00-02 implementation
+  `e474cd6cb04d1e3a52ca8243b089649171512a1c`, delivered on
+  `origin/codex/m00-02-web-api`. The current branch at confirmation is
+  `codex/m00-03-contracts`, HEAD `04113e98f9b7b7ce2c573feb879f0db1372db1fe`,
+  retaining that UX with the approved M00-03 API adapter.
+- The user did not separately supply the browser, viewport, test-session revision
+  or per-action trace. This is the user's acceptance of the delivered flow;
+  those execution details are not inferred from the earlier automated checks.
+- The pending M00-02 UX gate is cleared. Later Steps still require their own
+  authorization, prerequisites and checks; production/release gates remain.
+- This follow-up changes acceptance/status documentation only. Documentation
+  links, state consistency and staged diffs are checked; application tests are
+  not rerun because application code, contracts and dependencies are unchanged.
+  Pre-existing untracked Delivery2 material remains excluded.
 
 ## QA milestone / Git policy authoring (documentation only)
 
