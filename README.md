@@ -20,6 +20,8 @@ desktop and WeChat mini program support are possible later targets.
 developer retry when the service is unavailable. See [project status](docs/PROJECT-STATUS.md).
 `M00-03` adds shared Zod contracts, versioned health requests and typed errors;
 implementation checks and the human contract review passed on 2026-10-31.
+`M00-04` adds a default-deny auth boundary and an explicit local-only synthetic
+identity. Its automatic checks passed; the user waived its manual checkpoint.
 
 The user designated [.ai/FinPath_Delivery2_v1](.ai/FinPath_Delivery2_v1/START-HERE.md)
 as the source for the delivered PRD, architecture, algorithms and 53-Step task
@@ -39,7 +41,7 @@ Tauri and Taro may be evaluated for later platforms.
 ```text
 apps/web/               React/Vite web app and connectivity checks
 apps/api/               Hono health route, local listener and route tests
-packages/core/         Future platform-neutral domain logic
+packages/core/         Platform-neutral auth ports; future domain logic
 packages/contracts/    Shared Zod health/error contracts and validation
 packages/persistence/  Future persistence adapters
 packages/ui/           Future shared UI components
@@ -86,7 +88,7 @@ pnpm test
 `typecheck` compiles the six TypeScript projects into their ignored `dist/`
 directories. `build` also writes the web bundle to `apps/web/build/`. `test`
 builds first, then runs workspace, API route and web connectivity checks with
-Node's test runner, including M00-03 contract fixtures and inferred-type probes.
+Node's test runner, including contract/type probes and auth/startup rejection checks.
 The lint/format, Vitest, Playwright and CI setup is planned
 for M00-05.
 
@@ -128,12 +130,44 @@ page open, press `Ctrl+C` in the API terminal, then choose **重新检查**. Exp
 page. Expect **服务已连接**. Stop both commands with `Ctrl+C`. Human reviewers
 record the revision, date, browser and outcome in the M00-02 UX checklist.
 
+## Local authentication smoke (M00-04)
+
+Normal startup keeps mock auth off. Public health still returns 200;
+`GET /api/v1/private/health` returns the typed 401 `UNAUTHENTICATED` response.
+To exercise the synthetic local identity, open a fresh PowerShell at the repo
+root and explicitly opt in for that shell only:
+
+```powershell
+$env:APP_ENV = 'development'
+$env:NODE_ENV = 'development'
+$env:MOCK_AUTH = 'true'
+pnpm dev
+```
+
+In another shell, check the direct and proxied protected routes:
+
+```powershell
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8787/api/v1/private/health).Content
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:5173/api/v1/private/health).Content
+```
+
+Both return `{"status":"ok","service":"finpath-api"}`. The provider supplies
+only the fixed synthetic actor/workspace; request fields cannot select another
+identity. Use the documented `127.0.0.1` origins. Stop with Ctrl+C and close the
+test shell to discard its flags. No persistent environment setting is changed.
+
+Production/preview/staging or conflicting flags refuse to start mock mode.
+The portable handler stays anonymous and rejects deployment bindings that try
+to activate it. Do not expose local mock through public hosting or a tunnel.
+See the exact [auth contract](.ai/FinPath_Delivery2_v1/docs/architecture/API.md#m00-04-local-authentication-boundary)
+and [security boundary](.ai/FinPath_Delivery2_v1/docs/architecture/SECURITY.md#m00-04-local-mock-boundary).
+
 ## Resuming work
 
 Read [AGENTS.md](AGENTS.md), [project status](docs/PROJECT-STATUS.md) and the
-[delivery task index](.ai/FinPath_Delivery2_v1/tasks/INDEX.md). M00-03 is locally
-Verified with its contract approved. After its Git delivery and CI check,
-the next suggested task is `M00-04`, requiring a new instruction. Read only the
+[delivery task index](.ai/FinPath_Delivery2_v1/tasks/INDEX.md). M00-04 is locally
+Verified with its manual checkpoint explicitly waived. After its Git delivery
+and CI check, the next suggested task is `M00-05`, requiring a new instruction. Read only the
 current task's required sources and code. A delivered file is not permission to execute it.
 
 The local project remains at `D:\myWORK\project\finpath`. A separate Windows

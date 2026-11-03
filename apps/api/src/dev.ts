@@ -1,5 +1,21 @@
 import { serve } from '@hono/node-server';
-import app from './index.ts';
+import { createApp } from './index.ts';
+
+function createLocalApp() {
+  try {
+    return createApp({
+      runtime: 'local-node',
+      appEnv: process.env.APP_ENV,
+      nodeEnv: process.env.NODE_ENV,
+      mockAuth: process.env.MOCK_AUTH,
+    });
+  } catch {
+    console.error('FinPath API: invalid auth configuration. Mock auth requires explicit local development.');
+    process.exit(1);
+  }
+}
+
+const app = createLocalApp();
 
 const server = serve(
   { fetch: app.fetch, hostname: '127.0.0.1', port: 8787 },

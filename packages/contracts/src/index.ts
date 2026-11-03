@@ -14,7 +14,7 @@ export const HealthCheckRequestSchema = z.strictObject({
 export const EmptyQuerySchema = z.strictObject({});
 
 export const ErrorCodeSchema = z.enum([
-  'INVALID_REQUEST', 'NOT_FOUND', 'INTERNAL_ERROR',
+  'INVALID_REQUEST', 'UNAUTHENTICATED', 'NOT_FOUND', 'INTERNAL_ERROR',
 ]);
 
 export const ApiErrorResponseSchema = z.strictObject({
@@ -34,6 +34,7 @@ export type ApiErrorResponse = z.infer<typeof ApiErrorResponseSchema>;
 // Public messages are fixed here. Exception text and input values stay private.
 export const API_ERRORS = {
   INVALID_REQUEST: { status: 400, message: 'Invalid request.' },
+  UNAUTHENTICATED: { status: 401, message: 'Authentication required.' },
   NOT_FOUND: { status: 404, message: 'Resource not found.' },
   INTERNAL_ERROR: { status: 500, message: 'An unexpected error occurred.' },
 } as const satisfies Record<ErrorCode, { status: number; message: string }>;

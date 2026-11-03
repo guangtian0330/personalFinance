@@ -5,8 +5,12 @@ import {
   type ErrorCode,
 } from '@finpath/contracts';
 import type { Context } from 'hono';
+import type { AuthContext } from '@finpath/core';
 
-export type ApiEnvironment = { Variables: { requestId: string } };
+export type ApiEnvironment = {
+  Bindings: { APP_ENV?: string; NODE_ENV?: string; MOCK_AUTH?: string };
+  Variables: { requestId: string; auth: AuthContext | null };
+};
 
 export class ApiFailure extends Error {
   readonly code: ErrorCode;

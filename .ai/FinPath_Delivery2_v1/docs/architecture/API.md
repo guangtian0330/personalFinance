@@ -28,7 +28,8 @@ The exact schemas and inferred types live in
 The two versioned examples reject unknown query names, including empty names.
 Malformed/empty JSON, wrong value types, missing/unknown body fields, and missing
 or unsupported JSON media type return 400. Client-supplied `actorId` and
-`workspaceId` are unknown fields, never authorization. The version-prefix query
+`workspaceId` are unknown fields, never authorization. Outside the M00-04 private
+namespace (whose auth ordering is specified below), the version-prefix query
 check runs before route resolution: a rejected query returns 400 even on a
 missing route. Otherwise unregistered method/path combinations return 404;
 POST `/health` remains 404. Health success responses have exactly the two
@@ -53,7 +54,8 @@ in this Step; unknown error fields are rejected by the contract.
 
 Unexpected exceptions become the 500 envelope. Exception messages, stack traces,
 causes, Zod issue objects and input values are never serialized into errors.
-The other HTTP/domain codes proposed elsewhere in this document are future work.
+The M00-04 addition below supplies 401. Other proposed HTTP/domain codes remain
+future work.
 
 The Web adapter uses this prefix and validates requests and responses at runtime.
 Valid API errors become `ApiError` with status, code and request ID. Malformed or
@@ -77,6 +79,42 @@ receiving the concrete contract and passing verification report, the user replie
 "评审通过 批准" in this conversation. Approved scope: the routes, strict field/query
 validation, response/error shapes, empty details and status/code mapping in this
 section. This approval does not extend to the proposed business APIs below.
+
+## M00-04 local authentication boundary
+
+This Step adds `UNAUTHENTICATED` with HTTP 401 and fixed public message
+`Authentication required.` to the shared error schema/map. The existing empty
+`details`, server-generated request ID and error sanitization rules remain.
+The Web client recognizes this additive error code without UI changes.
+
+GET `/api/v1/private/health` is a read-only protected smoke route returning the
+existing `HealthResponse` on success. With no verified identity it returns 401.
+The whole `/api/v1/private/*` namespace authenticates before query validation,
+including anonymous POST and requests with unknown tenant selectors. After
+authentication, unknown queries return 400 and unsupported methods/routes 404.
+Existing public health and missing-route behavior remain unchanged. No `/me`,
+profile, account, session issuance or financial-resource API is implemented.
+
+[`AuthContext` and `AuthProvider`](../../../../packages/core/src/auth/index.ts)
+are platform-neutral interfaces. `authenticate(credential)` returns a trusted
+actor plus one resolved workspace or null. The credential is opaque and
+untrusted; the default provider rejects every value. The API passes the
+Authorization header to the provider without treating it as verified identity.
+A future real provider must validate credentials and workspace membership.
+Only validated, non-empty actor/workspace fields are copied into a frozen
+per-request context; missing context fails closed. Client actor/workspace
+headers, cookies, query fields and body fields do not establish tenant scope.
+
+The explicit local mock returns only `synthetic-local-developer` and
+`synthetic-local-workspace`. It ignores supplied credentials. Tests inspect its
+context with test-instance-only routes; no identity-debug endpoint is shipped.
+See [security configuration](SECURITY.md#m00-04-local-mock-boundary) and the
+[PowerShell instructions](../../../../README.md#local-authentication-smoke-m00-04).
+
+Manual contract checkpoint: **WAIVED_BY_USER** for this Step. On 2026-11-01 the
+user instructed "继续执行。并且跳过人工审核的部分。" after M00-04 was identified as
+the next Step. This is an explicit waiver, not a fabricated review PASS. Required
+automated security/contract checks still run; release restrictions remain.
 
 ## Identity/profile / feature
 

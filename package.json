@@ -15,7 +15,7 @@
     "build:contracts": "tsc --build packages/contracts",
     "build": "tsc --build && pnpm --filter @finpath/web build",
     "typecheck": "tsc --build",
-    "test": "pnpm run build && node --test tests/M00-01.workspace.test.mjs apps/api/tests/M00-02.health.test.mjs apps/web/tests/M00-02.api-health.test.mjs packages/contracts/tests/M00-03.contracts.test.mjs apps/api/tests/M00-03.errors.test.mjs apps/web/tests/M00-03.client.test.mjs"
+    "test": "pnpm run build && node --test tests/M00-01.workspace.test.mjs apps/api/tests/M00-02.health.test.mjs apps/web/tests/M00-02.api-health.test.mjs packages/contracts/tests/M00-03.contracts.test.mjs apps/api/tests/M00-03.errors.test.mjs apps/web/tests/M00-03.client.test.mjs apps/api/tests/M00-04.auth.test.mjs apps/api/tests/M00-04.startup.test.mjs"
   },
   "devDependencies": {
     "typescript": "6.0.3"

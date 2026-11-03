@@ -4,21 +4,70 @@ Updated: 2026-11-01 (America/Toronto).
 
 ## Current stage
 
-- Task: `M00-03` — shared Zod contracts, typed errors and versioned health client.
-- Local state: Verified; implementation checks passed and human contract review
-  `R@M00-03` APPROVED by the repository user on 2026-10-31.
-- Prerequisite: M00-02 was verified and pushed as
-  `e474cd6cb04d1e3a52ca8243b089649171512a1c` on `origin/codex/m00-02-web-api`.
-  Its exact-SHA status/check/workflow lists were empty before CI setup (M00-05).
-  Human UX gate `U@M00-02`: PASS, explicitly confirmed by the user on 2026-10-31.
+- Task: `M00-04` — auth adapter boundary and explicit local synthetic identity.
+- Local state: Verified; required automated checks passed. Manual auth-contract
+  checkpoint: WAIVED_BY_USER under the explicit 2026-11-01 instruction.
+- Prerequisite: M00-03 was verified/delivered as
+  `04113e98f9b7b7ce2c573feb879f0db1372db1fe`; its contract was approved.
+  M00-02 UX acceptance was recorded and pushed in
+  `71c84d88cbb39e192065bbb83d808a9b0ac8781f`, the base of this task branch.
+  Exact-SHA status/check/workflow lists were empty before CI setup (M00-05).
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Git delivery: M00-03 commit `04113e98f9b7b7ce2c573feb879f0db1372db1fe` was
-  pushed to `origin/codex/m00-03-contracts`; remote and local SHA matched.
-  Exact-SHA status contexts, check runs and workflow runs were empty:
-  `PUSHED_CI_NOT_CONFIGURED`, as expected before M00-05.
-- Next suggested task: `M00-04`, not authorized or executed.
+- Git delivery: this M00-04 task commit includes its evidence and waiver record;
+  actual SHA, push and exact-SHA CI results are reported after delivery.
+- Next suggested task: `M00-05`, not authorized or executed.
+
+## M00-04 verification and review waiver
+
+Authorization: after M00-04 was named as next, the user instructed
+"继续执行。并且跳过人工审核的部分。" on 2026-11-01. This authorizes the current
+Step and overrides its manual R checkpoint: **WAIVED_BY_USER**. No reviewer or
+human approval result is fabricated. Automated safety checks, scope restrictions
+and production/release gates remain. No global QA policy was weakened.
+
+Branch: `codex/m00-04-auth-boundary`, created from `71c84d8`. The tracked tree
+was clean; existing untracked source material and ZIP remain excluded. Changes
+are the core auth interfaces, API configuration/provider/middleware and private
+health probe, additive shared 401 error code, test command/fixtures and directly
+related contract/security/startup/status docs. No dependency or lockfile changed.
+
+The [auth contract](../.ai/FinPath_Delivery2_v1/docs/architecture/API.md#m00-04-local-authentication-boundary)
+and [security boundary](../.ai/FinPath_Delivery2_v1/docs/architecture/SECURITY.md#m00-04-local-mock-boundary)
+define the exact implementation. Default/disabled providers accept no credentials.
+Only the trusted Node local entrypoint with APP_ENV=development, MOCK_AUTH=true,
+and compatible NODE_ENV returns the fixed synthetic actor/workspace. Other
+requested mock configurations fail before listening. The portable handler rejects
+runtime mock bindings; a local mock instance rejects deployment auth bindings.
+Origin/host/forwarding checks add protection without granting identity from headers.
+The private namespace authenticates before validation and uses request-local,
+immutable trusted scope. This is only partial IT-005, not real-resource isolation.
+
+| B0 / L0-L2 verification (Windows PowerShell, Node 24.22.1, pnpm 11.25.0, TypeScript 6.0.3) | Observed result |
+| --- | --- |
+| `pnpm install --frozen-lockfile --offline --reporter=append-only` | Exit 0; lock SHA-256 unchanged: `303B48EABDB1EF7BC555E538BE6116EDD5DCA3D45C60E9570CF4FD7FFFC7075A`. |
+| `pnpm typecheck` | Exit 0; six packages compile, core retains no framework/HTTP/Node/browser dependencies. |
+| `pnpm test` (includes build) | Exit 0; 48/48 tests passed, zero failed/skipped/cancelled: all 33 previous regressions plus 15 M00-04 tests. Vite bundle built. |
+| Source `src/dev.ts` and compiled `dist/dev.js` startup subprocesses | 12 cases passed: production, preview, staging, missing APP_ENV, conflicting NODE_ENV and malformed flag each exit 1 before listener-ready output. |
+| Auth/schema/Web boundary | Verified default denial, fixed immutable synthetic actor, forged header/cookie/body/query rejection, missing middleware/context, concurrent actor/workspace isolation, provider-error sanitization, 401 decoding and status/code mismatch rejection. |
+| Runtime boundary negatives | External/null origin, public/suffix-spoofed host, forwarding metadata, portable mock bindings, local/deployment binding mixture and caller config mutation all fail closed. |
+| Process-scoped `APP_ENV=development`, `NODE_ENV=development`, `MOCK_AUTH=false`; `pnpm dev`; Node `fetch` assertions | 6/6 direct 8787 / proxied 5173 cases passed: public health 200, protected GET/POST with forged identity and query 401. |
+| Same local launch with `MOCK_AUTH=true`; Node `fetch` assertions | 12/12 direct/proxied cases passed: legacy/versioned/private health 200, external Origin/forwarded Host 401, authenticated unknown query 400. |
+| Ctrl+C for each owned launcher, then listener check | Ports 5173 and 8787 have no listeners. Test environment flags were process-scoped; no persistent Windows setting changed. |
+| Documentation / diff audit | All 18 task-owned files, 82 local links and 12 anchors checked; no credential-pattern findings, trailing whitespace or missing links. Read-only code/security and documentation review found no remaining blocker. |
+
+A read-only security review found no remaining implementation blocker. No test
+failure was waived. Browser UI was not changed; public health, Web adapter and
+actual Vite HTTP proxy regressions passed. Lint/formatter, Vitest/Playwright
+harness and remote CI are NOT_APPLICABLE_YET until M00-05. The existing Node
+tests and real HTTP assertions provide B0 evidence. No cloud service was used.
+
+Git delivery target: one task commit on `origin/codex/m00-04-auth-boundary` under
+standing authorization after diff/link/secret review. Its own unknown SHA is
+not embedded here; report the actual push and exact-SHA CI result afterwards.
+Remaining scope: real auth/session verification and resource-level authorization
+belong to later approved Steps. M00-05 was not executed; no merge or deployment.
 
 ## M00-03 verification and approved contract
 
@@ -83,7 +132,7 @@ authorization. The API source was already present
 but untracked; only this required, reviewed source is added to task ownership.
 Other untracked source documents and the ZIP remain excluded. Delivery completed
 as `04113e98f9b7b7ce2c573feb879f0db1372db1fe`; exact-SHA CI was not configured,
-as recorded above. M00-04 was not run.
+with matching local/remote branch SHA. M00-04 was not run in that Step.
 
 ## M00-02 verification and delivery evidence
 

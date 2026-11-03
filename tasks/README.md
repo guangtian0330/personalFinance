@@ -8,6 +8,7 @@
 | `M00-01` | Verified | Authorized 2026-10-30; Windows install, frozen lockfile, compile and 7/7 focused tests passed |
 | `M00-02` | Verified locally; human UX PASS | Windows shared startup, 15/15 tests and real browser outage/retry passed. User explicitly confirmed UX acceptance on 2026-10-31. |
 | `M00-03` | Verified locally | Implementation checks passed; user explicitly approved the concrete API contract on 2026-10-31. Git delivery/CI are reported separately. |
+| `M00-04` | Verified locally | 48/48 tests, startup rejection and 18/18 live HTTP checks passed. Manual checkpoint WAIVED_BY_USER on 2026-11-01. Git delivery/CI are separate. |
 
 The user designated [Delivery2's task index](../.ai/FinPath_Delivery2_v1/tasks/INDEX.md)
 as the source of task order and dependencies. Execute only the explicitly

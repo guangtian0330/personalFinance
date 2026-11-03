@@ -1,2 +1,1 @@
-// Domain implementation is introduced by approved M01 tasks.
-export {};
+export type { AuthContext, AuthProvider } from './auth/index.js';
