@@ -79,6 +79,28 @@ Browser reports/traces stay in ignored local output. This gate covers only
 synthetic local auth boundaries; real provider/resource authorization, financial
 algorithms and deployment remain future work. M01-01 was not executed.
 
+### M00-05 first CI run and checkout correction
+
+The task commit `cd1b02b1720bc3cd0d7e425e6d7f9b1d6c96cb36` was pushed to
+`origin/codex/m00-05-test-harness`; local/upstream/remote SHAs matched. Its
+[first CI run](https://github.com/guangtian0330/personalFinance/actions/runs/41561878016)
+failed Windows Format: the fresh checkout converted all 47 checked files to
+CRLF, conflicting with the existing LF formatter rule. This required failure
+blocks M00 closure; no downstream skipped check is treated as passed.
+Ubuntu completed every check successfully in that first run.
+
+A narrow follow-up adds root `.gitattributes` with `text=auto eol=lf`, aligning
+Git checkout with EditorConfig/Biome on both platforms. Binary files retain
+automatic binary detection; no global Git setting or source behavior changes.
+The already-pushed task commit is preserved; the fix uses an ordinary follow-up
+commit/push, with no rewrite or force push. Recheck the corrected SHA's two CI
+jobs before closure. Local `git -c core.autocrlf=true cat-file --filters` checks
+all 48 tracked engineering source/config files: every checkout now uses LF and
+matches the already verified working copy byte for byte. The same probe before
+the fix reproduced CRLF in `apps/api/package.json`. `pnpm format:check`,
+`pnpm lint` and `git diff --check` pass. No application tests need local rerun
+for this attributes/docs-only correction; the corrected SHA runs both full CI jobs.
+
 ## M00-04 verification and review waiver
 
 Authorization: after M00-04 was named as next, the user instructed

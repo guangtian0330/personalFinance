@@ -1,0 +1,2 @@
+# Match EditorConfig and Biome on Windows and Linux checkouts.
+* text=auto eol=lf

@@ -171,6 +171,8 @@ and [security boundary](.ai/FinPath_Delivery2_v1/docs/architecture/SECURITY.md#m
 
 Run these commands from the repository root in PowerShell. All checks are
 non-interactive and return nonzero on failure; no retry may hide a flaky check.
+Repository `.gitattributes` keeps text checkouts as LF on Windows and Linux,
+matching EditorConfig/Biome without changing the user's global Git settings.
 
 | Command | Scope |
 | --- | --- |
