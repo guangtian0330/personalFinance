@@ -22,7 +22,11 @@ function loadConfig(packagePath) {
   // Keep the real config path so ambient package types resolve from this
   // workspace package rather than the test runner's repository-root cwd.
   const config = ts.parseJsonConfigFileContent(
-    result.config, ts.sys, path.dirname(configPath), undefined, configPath,
+    result.config,
+    ts.sys,
+    path.dirname(configPath),
+    undefined,
+    configPath,
   );
   assert.deepEqual(config.errors, []);
   return config;
@@ -49,7 +53,9 @@ test('M00-01: all workspace dependency imports resolve with matching project ref
   for (const packagePath of packagePaths) {
     const manifest = JSON.parse(readFileSync(path.join(root, packagePath, 'package.json'), 'utf8'));
     const config = loadConfig(packagePath);
-    const references = new Set((config.projectReferences ?? []).map((ref) => path.resolve(ref.path)));
+    const references = new Set(
+      (config.projectReferences ?? []).map((ref) => path.resolve(ref.path)),
+    );
     for (const [name, version] of Object.entries(manifest.dependencies ?? {})) {
       // Framework dependencies arrive in later Steps; this invariant concerns
       // the internal workspace graph, not external registry packages.
@@ -64,21 +70,30 @@ test('M00-01: all workspace dependency imports resolve with matching project ref
       assert.ok(resolved, `${manifest.name} must resolve ${name}; run pnpm build first`);
       const dependencyRoot = path.dirname(path.dirname(resolved.resolvedFileName));
       // Resolve the linked package's canonical path, including Windows junctions.
-      assert.ok(references.has(path.resolve(ts.sys.realpath(dependencyRoot))), `${name} reference missing`);
+      assert.ok(
+        references.has(path.resolve(ts.sys.realpath(dependencyRoot))),
+        `${name} reference missing`,
+      );
     }
   }
 });
 
 test('M00-01: platform-neutral typed code compiles in core', () => {
-  assert.deepEqual(diagnosticsFor('packages/core', 'export const values: readonly number[] = [1, 2];'), []);
+  assert.deepEqual(
+    diagnosticsFor('packages/core', 'export const values: readonly number[] = [1, 2];'),
+    [],
+  );
 });
 
 test('M00-01: strict null, implicit-any and unchecked-index errors are rejected', () => {
-  const diagnostics = diagnosticsFor('packages/core', [
-    'export const value: string = null;',
-    'export function identity(input) { return input; }',
-    'const items: string[] = []; export const first: string = items[0];',
-  ].join('\n'));
+  const diagnostics = diagnosticsFor(
+    'packages/core',
+    [
+      'export const value: string = null;',
+      'export function identity(input) { return input; }',
+      'const items: string[] = []; export const first: string = items[0];',
+    ].join('\n'),
+  );
   const codes = diagnostics.map((diagnostic) => diagnostic.code);
   assert.ok(codes.includes(2322), 'null/index assignments must be rejected');
   assert.ok(codes.includes(7006), 'implicit any must be rejected');
@@ -86,15 +101,20 @@ test('M00-01: strict null, implicit-any and unchecked-index errors are rejected'
 });
 
 test('M00-01: exact optional properties reject an explicit undefined value', () => {
-  const diagnostics = diagnosticsFor('packages/core',
-    'export const value: { label?: string } = { label: undefined };');
+  const diagnostics = diagnosticsFor(
+    'packages/core',
+    'export const value: { label?: string } = { label: undefined };',
+  );
   assert.ok(diagnostics.some((diagnostic) => diagnostic.code === 2375));
 });
 
 test('M00-01: core cannot use browser or Node ambient globals', () => {
   for (const name of ['document', 'window', 'process']) {
     const diagnostics = diagnosticsFor('packages/core', `export const value = ${name};`);
-    assert.ok(diagnostics.some((diagnostic) => [2304, 2580, 2584, 2591].includes(diagnostic.code)), name);
+    assert.ok(
+      diagnostics.some((diagnostic) => [2304, 2580, 2584, 2591].includes(diagnostic.code)),
+      name,
+    );
   }
 });
 
@@ -103,7 +123,9 @@ test('M00-01: the web package can use its browser DOM library', () => {
 });
 
 test('M00-01: an undeclared workspace import fails resolution', () => {
-  const diagnostics = diagnosticsFor('packages/core',
-    'import type { Missing } from "@finpath/not-a-package"; export type Probe = Missing;');
+  const diagnostics = diagnosticsFor(
+    'packages/core',
+    'import type { Missing } from "@finpath/not-a-package"; export type Probe = Missing;',
+  );
   assert.ok(diagnostics.some((diagnostic) => diagnostic.code === 2307));
 });

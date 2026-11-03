@@ -74,6 +74,7 @@ no-push template text is superseded only within that grant.
 | M00-02 | Verified locally; human UX PASS — 2026-10-31 | Frozen install, build/typecheck, 15/15 tests and Chrome success/outage/recovery passed. User explicitly confirmed UX acceptance. See root `docs/PROJECT-STATUS.md`. |
 | M00-03 | Verified locally — 2026-10-31 | 33/33 tests and 14/14 live HTTP checks pass; user explicitly approved the concrete contract. Git delivery/CI are reported separately. See root `docs/PROJECT-STATUS.md`. |
 | M00-04 | Verified locally — 2026-11-01 | 48/48 tests, startup rejection and 18/18 live HTTP checks passed; manual auth checkpoint WAIVED_BY_USER. Git delivery/CI are separate. See root `docs/PROJECT-STATUS.md`. |
+| M00-05 | Verified locally — 2026-11-02 | Format/lint/typecheck/build, 48 Node + 3 Vitest + 2 harness + 6 Playwright cases passed. Exact-SHA Windows/Ubuntu CI is required after push before M00 closure; see root `docs/PROJECT-STATUS.md`. |
 
 All other Steps remain planned and require their own explicit authorization.
 

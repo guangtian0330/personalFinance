@@ -26,8 +26,11 @@ export function createAuthProvider(config: AuthConfiguration): AuthProvider {
     throw new AuthConfigurationError();
   }
   if (config.mockAuth !== 'true') return { authenticate: async () => null };
-  if (config.runtime !== 'local-node' || config.appEnv !== 'development'
-    || (config.nodeEnv !== undefined && config.nodeEnv !== 'development')) {
+  if (
+    config.runtime !== 'local-node' ||
+    config.appEnv !== 'development' ||
+    (config.nodeEnv !== undefined && config.nodeEnv !== 'development')
+  ) {
     throw new AuthConfigurationError();
   }
   // Request headers, cookies and payloads never select or modify this identity.
@@ -36,18 +39,23 @@ export function createAuthProvider(config: AuthConfiguration): AuthProvider {
 
 // Additional browser/rebinding protection; these headers never enable mock mode.
 const localOrigins = new Set([
-  'http://127.0.0.1:8787', 'http://127.0.0.1:5173', 'http://127.0.0.1:4173',
+  'http://127.0.0.1:8787',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:4173',
 ]);
 
 export function assertLocalMockRequest(request: Request): void {
   const origin = request.headers.get('Origin');
   const host = request.headers.get('Host');
-  if (!localOrigins.has(new URL(request.url).origin)
-    || (origin !== null && !localOrigins.has(origin))
-    || (host !== null && !localOrigins.has(`http://${host}`))
-    || request.headers.get('Sec-Fetch-Site') === 'cross-site'
-    || ['Forwarded', 'X-Forwarded-Host', 'X-Forwarded-Proto', 'X-Forwarded-For']
-      .some((name) => request.headers.has(name))) {
+  if (
+    !localOrigins.has(new URL(request.url).origin) ||
+    (origin !== null && !localOrigins.has(origin)) ||
+    (host !== null && !localOrigins.has(`http://${host}`)) ||
+    request.headers.get('Sec-Fetch-Site') === 'cross-site' ||
+    ['Forwarded', 'X-Forwarded-Host', 'X-Forwarded-Proto', 'X-Forwarded-For'].some((name) =>
+      request.headers.has(name),
+    )
+  ) {
     throw new ApiFailure('UNAUTHENTICATED');
   }
 }
@@ -56,12 +64,20 @@ export function requireAuth(provider: AuthProvider): MiddlewareHandler<ApiEnviro
   return async (context, next) => {
     context.set('auth', null);
     const identity = await provider.authenticate(context.req.header('Authorization'));
-    if (!identity || typeof identity.actorId !== 'string' || !identity.actorId.trim()
-      || typeof identity.workspaceId !== 'string' || !identity.workspaceId.trim()) {
+    if (
+      !identity ||
+      typeof identity.actorId !== 'string' ||
+      !identity.actorId.trim() ||
+      typeof identity.workspaceId !== 'string' ||
+      !identity.workspaceId.trim()
+    ) {
       throw new ApiFailure('UNAUTHENTICATED');
     }
     // Copy only verified fields into this request; never reuse mutable provider state.
-    context.set('auth', Object.freeze({ actorId: identity.actorId, workspaceId: identity.workspaceId }));
+    context.set(
+      'auth',
+      Object.freeze({ actorId: identity.actorId, workspaceId: identity.workspaceId }),
+    );
     await next();
   };
 }

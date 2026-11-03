@@ -3,7 +3,11 @@ import test from 'node:test';
 import app from '../../api/dist/index.js';
 import { ApiError, InvalidApiResponseError, createApiClient } from '../dist/api-client.js';
 import {
-  errorResponse, health, healthCheck, invalidHealthChecks, invalidHealthResponses,
+  errorResponse,
+  health,
+  healthCheck,
+  invalidHealthChecks,
+  invalidHealthResponses,
 } from '../../../packages/contracts/tests/M00-03.fixtures.mjs';
 
 test('M00-03: browser client and real Hono handler share GET and POST contracts', async () => {
@@ -15,7 +19,10 @@ test('M00-03: browser client and real Hono handler share GET and POST contracts'
   });
   assert.deepEqual(await client.getHealth(controller.signal), health);
   assert.deepEqual(await client.checkHealth(healthCheck, controller.signal), health);
-  assert.deepEqual(calls.map((call) => call.url), ['/api/v1/health', '/api/v1/health/check']);
+  assert.deepEqual(
+    calls.map((call) => call.url),
+    ['/api/v1/health', '/api/v1/health/check'],
+  );
   assert.equal(calls[1].options.method, 'POST');
   assert.equal(calls[1].options.headers['Content-Type'], 'application/json');
   assert.deepEqual(JSON.parse(calls[1].options.body), healthCheck);
@@ -27,7 +34,8 @@ test('M00-03: browser client and real Hono handler share GET and POST contracts'
 
 test('M00-03: invalid client input is rejected before any HTTP request', async () => {
   const client = createApiClient(async () => assert.fail('invalid input must not reach transport'));
-  for (const input of invalidHealthChecks) await assert.rejects(client.checkHealth(input), /Invalid health check request/);
+  for (const input of invalidHealthChecks)
+    await assert.rejects(client.checkHealth(input), /Invalid health check request/);
 });
 
 test('M00-03: client exposes safe typed status, code and request ID from the real API', async () => {
@@ -45,9 +53,15 @@ test('M00-03: client exposes safe typed status, code and request ID from the rea
 
 test('M00-03: client rejects unexpected success shapes and unexpected success status', async () => {
   for (const payload of invalidHealthResponses) {
-    await assert.rejects(createApiClient(async () => Response.json(payload)).getHealth(), InvalidApiResponseError);
+    await assert.rejects(
+      createApiClient(async () => Response.json(payload)).getHealth(),
+      InvalidApiResponseError,
+    );
   }
-  await assert.rejects(createApiClient(async () => Response.json(health, { status: 201 })).getHealth(), InvalidApiResponseError);
+  await assert.rejects(
+    createApiClient(async () => Response.json(health, { status: 201 })).getHealth(),
+    InvalidApiResponseError,
+  );
 });
 
 test('M00-03: malformed JSON, unsafe error bodies and status/code mismatches are protocol errors', async () => {
@@ -57,7 +71,11 @@ test('M00-03: malformed JSON, unsafe error bodies and status/code mismatches are
     Response.json({ ...errorResponse, stack: 'synthetic-private-stack' }, { status: 400 }),
     Response.json({ error: { ...errorResponse.error, requestId: 'not-a-uuid' } }, { status: 400 }),
     Response.json(health, { status: 400 }),
-  ]) await assert.rejects(createApiClient(async () => response).getHealth(), InvalidApiResponseError);
+  ])
+    await assert.rejects(
+      createApiClient(async () => response).getHealth(),
+      InvalidApiResponseError,
+    );
 });
 
 test('M00-03: valid typed 404/500 errors retain their declared status and code', async () => {
@@ -65,11 +83,22 @@ test('M00-03: valid typed 404/500 errors retain their declared status and code',
     [404, 'NOT_FOUND', 'Resource not found.'],
     [500, 'INTERNAL_ERROR', 'An unexpected error occurred.'],
   ]) {
-    const client = createApiClient(async () => Response.json({
-      error: { ...errorResponse.error, code, message },
-    }, { status }));
-    await assert.rejects(client.getHealth(), (error) => error instanceof ApiError
-      && error.status === status && error.error.code === code && error.message === message);
+    const client = createApiClient(async () =>
+      Response.json(
+        {
+          error: { ...errorResponse.error, code, message },
+        },
+        { status },
+      ),
+    );
+    await assert.rejects(
+      client.getHealth(),
+      (error) =>
+        error instanceof ApiError &&
+        error.status === status &&
+        error.error.code === code &&
+        error.message === message,
+    );
   }
 });
 

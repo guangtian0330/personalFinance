@@ -22,6 +22,9 @@ developer retry when the service is unavailable. See [project status](docs/PROJE
 implementation checks and the human contract review passed on 2026-10-31.
 `M00-04` adds a default-deny auth boundary and an explicit local-only synthetic
 identity. Its automatic checks passed; the user waived its manual checkpoint.
+`M00-05` establishes Biome formatting/lint, Vitest API smoke, Playwright browser
+smoke and a Windows/Linux CI workflow. Local verification and remote CI are
+recorded separately in project status and the exact commit's Actions run.
 
 The user designated [.ai/FinPath_Delivery2_v1](.ai/FinPath_Delivery2_v1/START-HERE.md)
 as the source for the delivered PRD, architecture, algorithms and 53-Step task
@@ -49,7 +52,7 @@ packages/ui/           Future shared UI components
 .ai/FinPath_Delivery2_v1/tasks/  Authoritative Step order and specifications
 docs/PROJECT-STATUS.md Current state, blockers and verification evidence
 tasks/                 Navigation to the delivery task index
-tests/                 M00-01 workspace/compiler verification
+tests/                 Workspace/compiler checks, harness probes and browser smoke
 AGENTS.md              Repository-wide agent protocol
 ```
 
@@ -80,17 +83,19 @@ Then, from the repository root:
 node --version
 pnpm --version
 pnpm install --frozen-lockfile
+pnpm format:check
+pnpm lint
 pnpm typecheck
 pnpm build
 pnpm test
+pnpm exec playwright install chromium
+pnpm test:e2e
 ```
 
 `typecheck` compiles the six TypeScript projects into their ignored `dist/`
 directories. `build` also writes the web bundle to `apps/web/build/`. `test`
-builds first, then runs workspace, API route and web connectivity checks with
-Node's test runner, including contract/type probes and auth/startup rejection checks.
-The lint/format, Vitest, Playwright and CI setup is planned
-for M00-05.
+builds first, then runs the retained 48 Node regressions, Vitest API smoke and
+isolated harness failure probes. The full command set is described below.
 
 Workspace dependencies use `workspace:*` and matching TypeScript references.
 The core package has no dependencies, browser globals or Node ambient types.
@@ -162,12 +167,54 @@ to activate it. Do not expose local mock through public hosting or a tunnel.
 See the exact [auth contract](.ai/FinPath_Delivery2_v1/docs/architecture/API.md#m00-04-local-authentication-boundary)
 and [security boundary](.ai/FinPath_Delivery2_v1/docs/architecture/SECURITY.md#m00-04-local-mock-boundary).
 
+## Test harness and CI (M00-05)
+
+Run these commands from the repository root in PowerShell. All checks are
+non-interactive and return nonzero on failure; no retry may hide a flaky check.
+
+| Command | Scope |
+| --- | --- |
+| `pnpm format:check` / `pnpm format` | Check / apply Biome formatting to application/package code, tests and root JS/JSON config. Generated files and Delivery2 materials are excluded. |
+| `pnpm lint` | Biome recommended rules, with warnings treated as errors. |
+| `pnpm typecheck` / `pnpm build` | Strict six-package TypeScript compilation / compilation plus Vite web bundle. |
+| `pnpm test` | Build, 48 retained Node regressions, three Vitest API checks, two harness checks. Includes production/preview/staging mock startup rejection. |
+| `pnpm test:unit` | Vitest `*.vitest.test.ts` / `*.vitest.test.mjs` under apps, packages or tests; run build first for compiled workspace imports. |
+| `pnpm test:regression` / `pnpm test:harness` | Existing Node suites / real runner, lint and formatter rejection probes; normally invoked by `pnpm test`. |
+| `pnpm test:e2e` | Build and six Playwright Chromium cases across desktop and 390×844: connection, keyboard retry, outage/recovery and live direct/proxy API checks. |
+
+Install the pinned browser once with `pnpm exec playwright install chromium`.
+Linux CI uses `pnpm exec playwright install --with-deps chromium`. Playwright
+starts the compiled API on `127.0.0.1:8787` and built web preview on
+`127.0.0.1:4173`, using explicit development flags with MOCK_AUTH=false. It never
+reuses an existing server and cleans up its own processes. Stop your dev server
+before running E2E; an occupied port is an error, not permission to kill its owner.
+The outage case aborts only that browser's request, then recovers through the
+real proxy/API. It does not change the machine's network configuration.
+
+HTML reports are local under ignored `playwright-report/`; failure traces and
+screenshots go under ignored `test-results/`. View locally with
+`pnpm exec playwright show-report`. Fixtures are synthetic. Temporary negative
+probes are cleaned in `finally` and ignored if interrupted; they must never be
+committed. Focused-only Vitest/Playwright tests and empty Vitest suites fail.
+
+The [CI workflow](.github/workflows/ci.yml) runs the same gates on Ubuntu and
+Windows for pushes and pull requests. It pins official Actions by commit,
+reads Node/pnpm versions from the repository, uses a frozen install and only
+`contents: read`. It has no deployment step, secrets or published test artifacts.
+Both `verify (ubuntu-latest)` and `verify (windows-latest)` must succeed for the
+exact delivered SHA. Adding this workflow does not configure remote branch
+protection, imply a green run, or grant release approval.
+
+Tool references: [Biome configuration](https://biomejs.dev/reference/configuration/),
+[Vitest](https://vitest.dev/guide/) and
+[Playwright web servers](https://playwright.dev/docs/test-webserver).
+
 ## Resuming work
 
 Read [AGENTS.md](AGENTS.md), [project status](docs/PROJECT-STATUS.md) and the
-[delivery task index](.ai/FinPath_Delivery2_v1/tasks/INDEX.md). M00-04 is locally
-Verified with its manual checkpoint explicitly waived. After its Git delivery
-and CI check, the next suggested task is `M00-05`, requiring a new instruction. Read only the
+[delivery task index](.ai/FinPath_Delivery2_v1/tasks/INDEX.md). M00-05 is locally
+Verified; both exact-SHA CI matrix jobs must pass after push before closing M00.
+The next suggested task is `M01-01`, requiring a new instruction. Read only the
 current task's required sources and code. A delivered file is not permission to execute it.
 
 The local project remains at `D:\myWORK\project\finpath`. A separate Windows

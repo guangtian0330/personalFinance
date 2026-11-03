@@ -8,7 +8,11 @@ import {
 import { Hono } from 'hono';
 import { ApiFailure, errorResponse, type ApiEnvironment } from './errors.ts';
 import {
-  AuthConfigurationError, assertLocalMockRequest, createAuthProvider, getAuthContext, requireAuth,
+  AuthConfigurationError,
+  assertLocalMockRequest,
+  createAuthProvider,
+  getAuthContext,
+  requireAuth,
   type AuthConfiguration,
 } from './auth.ts';
 
@@ -18,7 +22,8 @@ export function createApp(authConfig: AuthConfiguration = { runtime: 'deployed' 
   const localMock = authConfig.mockAuth === 'true';
   const app = new Hono<ApiEnvironment>();
   const health: HealthResponse = HealthResponseSchema.parse({
-    status: 'ok', service: 'finpath-api',
+    status: 'ok',
+    service: 'finpath-api',
   });
 
   app.use('*', async (context, next) => {
@@ -29,26 +34,34 @@ export function createApp(authConfig: AuthConfiguration = { runtime: 'deployed' 
     context.set('auth', null);
     // Worker-style bindings arrive at dispatch, never from request headers.
     // A deployed handler cannot enable mock auth, even if labelled development.
-    if (localMock && [context.env?.APP_ENV, context.env?.NODE_ENV, context.env?.MOCK_AUTH]
-      .some((value) => value !== undefined)) {
+    if (
+      localMock &&
+      [context.env?.APP_ENV, context.env?.NODE_ENV, context.env?.MOCK_AUTH].some(
+        (value) => value !== undefined,
+      )
+    ) {
       throw new AuthConfigurationError();
     }
     createAuthProvider({ runtime: 'deployed', mockAuth: context.env?.MOCK_AUTH });
     await next();
   });
 
-  app.onError((error, context) => errorResponse(
-    context, error instanceof ApiFailure ? error.code : 'INTERNAL_ERROR',
-  ));
+  app.onError((error, context) =>
+    errorResponse(context, error instanceof ApiFailure ? error.code : 'INTERNAL_ERROR'),
+  );
   app.notFound((context) => errorResponse(context, 'NOT_FOUND'));
 
   // Compatibility route keeps the M00-02 response and method semantics.
   app.get('/health', (context) => context.json(health));
 
-  app.use(`${API_PREFIX}/private/*`, async (context, next) => {
-    if (localMock) assertLocalMockRequest(context.req.raw);
-    await next();
-  }, requireAuth(authProvider));
+  app.use(
+    `${API_PREFIX}/private/*`,
+    async (context, next) => {
+      if (localMock) assertLocalMockRequest(context.req.raw);
+      await next();
+    },
+    requireAuth(authProvider),
+  );
 
   app.use(`${API_PREFIX}/*`, async (context, next) => {
     // URLSearchParams preserves empty names that router query helpers may drop.

@@ -17,7 +17,9 @@ for (const entry of ['../src/dev.ts', '../dist/dev.js']) {
       for (const name of ['APP_ENV', 'NODE_ENV', 'MOCK_AUTH']) delete env[name];
       Object.assign(env, flags);
       const result = spawnSync(process.execPath, [fileURLToPath(new URL(entry, import.meta.url))], {
-        env, encoding: 'utf8', timeout: 5000,
+        env,
+        encoding: 'utf8',
+        timeout: 5000,
       });
       assert.equal(result.error, undefined);
       assert.equal(result.status, 1);

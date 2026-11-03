@@ -14,7 +14,10 @@ export const HealthCheckRequestSchema = z.strictObject({
 export const EmptyQuerySchema = z.strictObject({});
 
 export const ErrorCodeSchema = z.enum([
-  'INVALID_REQUEST', 'UNAUTHENTICATED', 'NOT_FOUND', 'INTERNAL_ERROR',
+  'INVALID_REQUEST',
+  'UNAUTHENTICATED',
+  'NOT_FOUND',
+  'INTERNAL_ERROR',
 ]);
 
 export const ApiErrorResponseSchema = z.strictObject({

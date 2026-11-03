@@ -42,6 +42,29 @@ failed, skipped or flaky required checks block delivery; unavailable future
 tooling is explicitly NOT_APPLICABLE_YET. Discover actual script names, not
 assumed `test:integration` or `test:e2e` commands. Never fabricate green CI.
 
+## M00-05 implemented harness (2026-11-02)
+
+The baseline paragraph above is historical. M00-05 adds pinned Biome 2.6.4,
+Vitest 5.0.0 and Playwright 1.64.1. Root
+[`README`](../../../../README.md#test-harness-and-ci-m00-05) documents exact
+PowerShell commands, discovery patterns, browser installation and cleanup.
+`pnpm test` builds and retains all M00-01–04 Node checks, then runs Vitest and
+isolated negative harness probes. `pnpm test:e2e` builds and tests the real
+compiled API plus Vite preview on loopback, with mock auth disabled.
+
+Vitest and Playwright reject focused-only tests and have zero retries. Vitest
+also rejects an empty suite. The harness intentionally creates failing assertion,
+focused-test, lint and formatting fixtures and checks their nonzero exits;
+valid lint/format replacements must pass. Expected child failures are verified
+test behavior, never waived suite failures. Temporary probes contain no real data.
+
+The [workflow](../../../../.github/workflows/ci.yml) runs frozen install,
+format/lint/typecheck, unit/regression/harness/build and API/UI smoke on both
+Ubuntu and Windows. Local verification precedes the task commit/push; both
+matrix jobs must succeed for that exact SHA before M00 closes. There is no
+deployment, token-bearing fixture, artifact upload or branch-protection change.
+This is the local IT-005 boundary regression, not real-provider/resource isolation.
+
 ## Test data
 
 Synthetic only; accounts CAD, CNY, JPY, loan/card, month boundary, leap day, negative/zero, overflow, concurrency, refunds, duplicate API retries, double allocations, scenario modifications, migration rollback. Maintain fixture documentation and deterministic clock.

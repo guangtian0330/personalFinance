@@ -15,9 +15,19 @@
     "build:contracts": "tsc --build packages/contracts",
     "build": "tsc --build && pnpm --filter @finpath/web build",
     "typecheck": "tsc --build",
-    "test": "pnpm run build && node --test tests/M00-01.workspace.test.mjs apps/api/tests/M00-02.health.test.mjs apps/web/tests/M00-02.api-health.test.mjs packages/contracts/tests/M00-03.contracts.test.mjs apps/api/tests/M00-03.errors.test.mjs apps/web/tests/M00-03.client.test.mjs apps/api/tests/M00-04.auth.test.mjs apps/api/tests/M00-04.startup.test.mjs"
+    "test": "pnpm run build && pnpm test:regression && pnpm test:unit && pnpm test:harness",
+    "test:regression": "node --test tests/M00-01.workspace.test.mjs apps/api/tests/M00-02.health.test.mjs apps/web/tests/M00-02.api-health.test.mjs packages/contracts/tests/M00-03.contracts.test.mjs apps/api/tests/M00-03.errors.test.mjs apps/web/tests/M00-03.client.test.mjs apps/api/tests/M00-04.auth.test.mjs apps/api/tests/M00-04.startup.test.mjs",
+    "test:unit": "vitest run",
+    "test:harness": "node --test tests/M00-05.harness.test.mjs",
+    "test:e2e": "pnpm run build && playwright test",
+    "lint": "biome lint --error-on-warnings .",
+    "format:check": "biome format .",
+    "format": "biome format --write ."
   },
   "devDependencies": {
-    "typescript": "6.0.3"
+    "@biomejs/biome": "2.6.4",
+    "@playwright/test": "1.64.1",
+    "typescript": "6.0.3",
+    "vitest": "5.0.0"
   }
 }

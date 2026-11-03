@@ -1,23 +1,83 @@
 # FinPath project status
 
-Updated: 2026-11-01 (America/Toronto).
+Updated: 2026-11-02 (America/Toronto).
 
 ## Current stage
 
-- Task: `M00-04` — auth adapter boundary and explicit local synthetic identity.
-- Local state: Verified; required automated checks passed. Manual auth-contract
-  checkpoint: WAIVED_BY_USER under the explicit 2026-11-01 instruction.
-- Prerequisite: M00-03 was verified/delivered as
-  `04113e98f9b7b7ce2c573feb879f0db1372db1fe`; its contract was approved.
-  M00-02 UX acceptance was recorded and pushed in
-  `71c84d88cbb39e192065bbb83d808a9b0ac8781f`, the base of this task branch.
-  Exact-SHA status/check/workflow lists were empty before CI setup (M00-05).
+- Task: `M00-05` — CI, formatting and test harness.
+- Local state: Verified. Matrix manual state: NOT_APPLICABLE (N). No API,
+  data/schema or product contract changed.
+- Prerequisite: M00-04 verified and delivered as
+  `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
+  `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
+  remote refs matched; exact-SHA status/check/workflow lists were empty before
+  CI setup. Its manual waiver and M00-02 human UX PASS remain recorded below.
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Git delivery: this M00-04 task commit includes its evidence and waiver record;
-  actual SHA, push and exact-SHA CI results are reported after delivery.
-- Next suggested task: `M00-05`, not authorized or executed.
+- Git delivery: this M00-05 task commit includes local evidence; actual SHA,
+  push and CI results are reported after delivery. M00 closure requires both
+  exact-SHA `verify (ubuntu-latest)` / `verify (windows-latest)` jobs to succeed.
+- Next suggested task: `M01-01`, not authorized or executed.
+
+## M00-05 local verification and CI gate
+
+Authorized by "继续执行下一个task" on 2026-11-02. Branch
+`codex/m00-05-test-harness`, based on the delivered M00-04 SHA above. The tracked
+tree was clean; pre-existing untracked Delivery2 sources and ZIP remain excluded.
+One implementation writer and a read-only reviewer were used.
+
+Added root Biome/Vitest/Playwright configs, pinned dev dependencies/lockfile,
+test scripts, API/browser smoke, isolated failure probes and the CI workflow.
+Formatting establishes a baseline for existing code/tests without changing
+contracts or financial behavior. The only explanatory source comment preserves
+the deliberate `attempt` dependency that triggers the existing retry effect.
+Necessary support paths include root configs, tests, ignore rules and docs.
+
+Local checks ran from `D:\myWORK\project\finpath` in Windows PowerShell with
+Node 24.22.1, pnpm 11.25.0, TypeScript 6.0.3, Biome 2.6.4, Vitest 5.0.0,
+Playwright 1.64.1 and its Chromium 156.0.8078.4 (build 1248).
+
+| Command / assigned B, L0–L3 check | Observed result |
+| --- | --- |
+| `pnpm install --frozen-lockfile --offline --reporter=append-only` | Exit 0; post-install lock SHA-256 remains `D74C1B596E7B92A3CDFAB15D47D13FF377E7377B5BCBB96A06FF7EE6BEBC65F1`. |
+| `pnpm format:check` / `pnpm lint` | Exit 0; 47 formatted / 48 linted files. Recommended lint rules enabled; warnings fail. |
+| `pnpm typecheck` | Exit 0; all six package references, including core platform isolation. |
+| `pnpm test` (build plus all three suites) | Exit 0: 48/48 prior Node regressions, 3/3 Vitest API smoke, 2/2 harness tests; zero failed/skipped/cancelled. |
+| Existing M00-04 source/compiled startup regression | All 12 unsafe configurations still exit before listening, including production/preview/staging mock requests. |
+| Isolated harness fixtures | Actual Vitest assertion failure and focused-only test return 1; actual lint debugger and malformed-format fixtures return 1; corrected lint/format fixtures return 0. Temporary files removed in `finally`. |
+| `pnpm exec playwright install chromium` | Exit 0; pinned browser downloaded from Playwright's official CDN to its standard user cache. |
+| `pnpm test:e2e` (build plus Chromium) | Exit 0, 6/6 at desktop and 390×844: real connection/keyboard retry, intercepted outage then real recovery, direct/proxied 200/400/401. Zero retries/skips. |
+| Loopback listener inspection after E2E | No listeners remain on 4173, 5173 or 8787. Test process env fixes development mode and MOCK_AUTH=false; no persistent settings changed. |
+| Read-only implementation/workflow review | No blocker; 16 formatted pre-existing TS/JS/TSX files have equivalent transpiled runtime ASTs. |
+| Staged delivery audit | 34 explicit task files; 83 tracked local links and 12 anchors resolve; index matches working files, whitespace/diff and credential-pattern checks pass. Unrelated untracked material excluded. |
+
+The first pnpm command inside the sandbox hit its external-store symlink
+restriction; the approved native retry succeeded. The initially queried Vitest
+5.1.0 had just been released and pnpm added release-age exceptions. It was
+replaced with 5.0.0 and all added exceptions removed; existing workspace policy
+is unchanged. The first negative harness run caught Biome's migration selecting
+`preset: none`; it is now explicitly `recommended`. The probe now uses isolated
+files for rule-specific diagnostics and verifies a passing replacement too.
+The retry-effect lint finding was resolved with a narrow rationale, not by
+removing retry behavior or disabling the rule globally. Final full checks pass.
+Inherited NO_COLOR/FORCE_COLOR produced harmless browser-run display warnings.
+
+CI configuration: push/pull_request on Ubuntu and Windows; official Actions
+pinned to independently checked commit SHAs (pnpm's annotated tag resolved to
+its commit); Node/pnpm read from repository pins; frozen install, same local
+quality/test commands, 20-minute limit and contents-read-only token. No secrets,
+deployment, artifact publication, cloud provisioning or branch protection change.
+Workflow review precedes this commit; actual remote execution follows push.
+M00 remains pending remote CI until both exact-SHA jobs pass. External webhook
+settings are not visible from the local repository; no local deployment hook exists.
+
+See [README](../README.md#test-harness-and-ci-m00-05), the
+[test strategy](../.ai/FinPath_Delivery2_v1/docs/testing/TEST-STRATEGY.md#m00-05-implemented-harness-2026-11-02)
+and [workflow](../.github/workflows/ci.yml) for reproducible commands/configuration.
+Browser reports/traces stay in ignored local output. This gate covers only
+synthetic local auth boundaries; real provider/resource authorization, financial
+algorithms and deployment remain future work. M01-01 was not executed.
 
 ## M00-04 verification and review waiver
 

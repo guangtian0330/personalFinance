@@ -19,19 +19,30 @@ test('M00-02: HTTP errors and a wrong service never appear connected', async () 
 });
 
 test('M00-02: malformed JSON from a wrong proxy target is rejected', async () => {
-  await assert.rejects(checkApiHealth(undefined, async () => new Response('<html>not health</html>')));
+  await assert.rejects(
+    checkApiHealth(undefined, async () => new Response('<html>not health</html>')),
+  );
 });
 
 test('M00-02: network failure remains an error and the next attempt can recover', async () => {
-  await assert.rejects(checkApiHealth(undefined, async () => { throw new TypeError('Network failed'); }));
-  await checkApiHealth(undefined, async () => Response.json({ status: 'ok', service: 'finpath-api' }));
+  await assert.rejects(
+    checkApiHealth(undefined, async () => {
+      throw new TypeError('Network failed');
+    }),
+  );
+  await checkApiHealth(undefined, async () =>
+    Response.json({ status: 'ok', service: 'finpath-api' }),
+  );
 });
 
 test('M00-02: caller cancellation reaches the health request', async () => {
   const controller = new AbortController();
   controller.abort();
-  await assert.rejects(checkApiHealth(controller.signal, async (_url, options) => {
-    options.signal.throwIfAborted();
-    return Response.json({ status: 'ok', service: 'finpath-api' });
-  }), { name: 'AbortError' });
+  await assert.rejects(
+    checkApiHealth(controller.signal, async (_url, options) => {
+      options.signal.throwIfAborted();
+      return Response.json({ status: 'ok', service: 'finpath-api' });
+    }),
+    { name: 'AbortError' },
+  );
 });

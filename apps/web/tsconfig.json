@@ -9,8 +9,5 @@
     "types": ["vite/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "references": [
-    { "path": "../../packages/contracts" },
-    { "path": "../../packages/ui" }
-  ]
+  "references": [{ "path": "../../packages/contracts" }, { "path": "../../packages/ui" }]
 }
