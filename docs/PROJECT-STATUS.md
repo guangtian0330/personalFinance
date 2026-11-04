@@ -5,8 +5,8 @@ Updated: 2026-11-03 (America/Toronto).
 ## Current stage
 
 - Task: `M01-01` — Money, currencies, scales and rounding. M00-05 is integrated.
-- M01-01 local state: Verified. User-approved representation/rounding design
-  review is recorded; PR merge still requires approval under the high-risk policy.
+- M01-01 state: Delivered. User-approved representation/rounding design review
+  is recorded; PR #2 merge still requires human approval under the high-risk policy.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -51,7 +51,7 @@ SHAs are not written into their own commit.
 | M00-03 | Contract package + typed errors | M00-02 | Integrated | PR #1 merged to main (2026-11-03) |
 | M00-04 | Auth adapter interface with dev-only mock | M00-03 | Integrated | PR #1 merged to main (2026-11-03) |
 | M00-05 | CI, formatting and test harness | M00-04 | Integrated | PR #1 merged to main (2026-11-03) |
-| M01-01 | Money, currencies, scales and rounding | M00-05 | Verified | Local gates passed; delivery follows |
+| M01-01 | Money, currencies, scales and rounding | M00-05 | Delivered | `codex/m01-01`, implementation `6b7282cec200724a89e89662a2fea14b70d72910`; [PR #2](https://github.com/guangtian0330/personalFinance/pull/2); exact-SHA CI pending |
 | M01-02 | Accounts and tenant-aware base schema | M01-01 | Pending | Not started |
 | M01-03 | Balanced journal and reversal domain | M01-02 | Pending | Not started |
 | M01-04 | Ledger REST endpoints and idempotency | M01-03 | Pending | Not started |
@@ -127,8 +127,12 @@ changed.
 | Money vectors | CAD 1.23→123, CNY 1.23→123, JPY 123→123; mixed-currency rejection; ±0.5 ties round away from zero; safe-number and both int64 boundaries checked. |
 | E2E | Not run: core-only primitives have no UI/API consumer; existing E2E boundaries are unaffected. |
 
-M01-01 local verification is complete. Git delivery, exact-SHA remote CI and PR
-review are recorded after push; no M01-02 work has started.
+M01-01 local verification and delivery are complete: commit
+`6b7282cec200724a89e89662a2fea14b70d72910` was pushed to `origin/codex/m01-01`
+and PR [#2](https://github.com/guangtian0330/personalFinance/pull/2) targets
+`main`. Exact-SHA CI is running; its current report is `PUSHED_CI_PENDING`. PR
+is mergeable with no conflict, but human approval is required due to financial
+primitives. No M01-02 work has started.
 
 ## M00-05 local verification and CI gate
 

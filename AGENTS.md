@@ -42,8 +42,9 @@
    suite alone does not verify integration. Use synthetic data only.
 6. Inspect diffs and staged/untracked filenames for secrets, real data, unsafe
    migrations, regressions and unexpected changes. Stage only task-owned files.
-7. After verification, include project status and task markers in the same task
-   commit. Keep local verification, delivery, CI and human acceptance separate;
+7. After verification, include local project status and task markers in the task
+   commit. After push/PR creation, record Delivered/CI/PR metadata on the branch
+   as needed. Keep local verification, delivery, CI and human acceptance separate;
    never invent human signoff or embed a commit's own unknown SHA in its contents.
 8. Under the standing user request, every successfully verified Step ends with
    one logical task commit, ordinary push to its current authorized remote branch,

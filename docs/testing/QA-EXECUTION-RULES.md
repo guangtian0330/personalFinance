@@ -59,7 +59,9 @@ dependencies. Index display order does not create extra dependency edges.
    must be synthetic and redacted. No unsafe migration or authorization shortcut.
 7. Record local outcome, branch, commands/results, applicable gate IDs, human
    status and limitations in project status; update the existing task marker
-   only after actual verification. These updates belong in the same task commit.
+   only after actual verification. Include the Verified state in the task commit.
+   After push/PR creation, record Delivered, PR and CI state on the same branch as
+   needed; never embed a metadata commit's own unknown SHA in its contents.
 8. If every required local/design gate passes, perform the delivery protocol
    below, create a PR, and check exact-SHA CI. Merge only under the risk policy
    below. Report the observed state and STOP; do not start the next Step.
