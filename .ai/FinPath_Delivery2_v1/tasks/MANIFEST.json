@@ -1,0 +1,651 @@
+{
+  "product": "FinPath",
+  "version": "1.0",
+  "status": "proposed",
+  "bootstrap": "M00-BOOTSTRAP-000 completed, confirm locally",
+  "tasks": [
+    {
+      "id": "M00-01",
+      "file": "tasks/M00/M00-01.md",
+      "dependsOn": [],
+      "sourceDocs": [
+        "docs/architecture/SYSTEM.md",
+        "docs/architecture/DEPLOYMENT.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M00-02",
+      "file": "tasks/M00/M00-02.md",
+      "dependsOn": [
+        "M00-01"
+      ],
+      "sourceDocs": [
+        "docs/architecture/SYSTEM.md",
+        "docs/architecture/DEPLOYMENT.md",
+        "docs/roadmap/ROADMAP.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M00-03",
+      "file": "tasks/M00/M00-03.md",
+      "dependsOn": [
+        "M00-02"
+      ],
+      "sourceDocs": [
+        "docs/architecture/API.md",
+        "docs/architecture/SYSTEM.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M00-04",
+      "file": "tasks/M00/M00-04.md",
+      "dependsOn": [
+        "M00-03"
+      ],
+      "sourceDocs": [
+        "docs/architecture/SECURITY.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M00-05",
+      "file": "tasks/M00/M00-05.md",
+      "dependsOn": [
+        "M00-04"
+      ],
+      "sourceDocs": [
+        "docs/testing/TEST-STRATEGY.md",
+        "docs/architecture/DEPLOYMENT.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M01-01",
+      "file": "tasks/M01/M01-01.md",
+      "dependsOn": [
+        "M00-05"
+      ],
+      "sourceDocs": [
+        "docs/architecture/DOMAIN.md",
+        "docs/architecture/DATABASE.md",
+        "docs/algorithms/REPORTS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M01-02",
+      "file": "tasks/M01/M01-02.md",
+      "dependsOn": [
+        "M01-01"
+      ],
+      "sourceDocs": [
+        "docs/architecture/DATABASE.md",
+        "docs/architecture/SECURITY.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M01-03",
+      "file": "tasks/M01/M01-03.md",
+      "dependsOn": [
+        "M01-02"
+      ],
+      "sourceDocs": [
+        "docs/architecture/DOMAIN.md",
+        "docs/architecture/DATABASE.md",
+        "docs/algorithms/REPORTS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M01-04",
+      "file": "tasks/M01/M01-04.md",
+      "dependsOn": [
+        "M01-03"
+      ],
+      "sourceDocs": [
+        "docs/architecture/API.md",
+        "docs/architecture/SECURITY.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M01-05",
+      "file": "tasks/M01/M01-05.md",
+      "dependsOn": [
+        "M01-04"
+      ],
+      "sourceDocs": [
+        "docs/requirements/USER-FLOWS.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M01-06",
+      "file": "tasks/M01/M01-06.md",
+      "dependsOn": [
+        "M01-05"
+      ],
+      "sourceDocs": [
+        "docs/testing/INTEGRATION-ACCEPTANCE.md",
+        "docs/algorithms/REPORTS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M02-01",
+      "file": "tasks/M02/M02-01.md",
+      "dependsOn": [
+        "M01-06"
+      ],
+      "sourceDocs": [
+        "docs/requirements/FEATURE-CATALOG.md",
+        "docs/architecture/DATABASE.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M02-02",
+      "file": "tasks/M02/M02-02.md",
+      "dependsOn": [
+        "M02-01"
+      ],
+      "sourceDocs": [
+        "docs/requirements/PRD.md",
+        "docs/architecture/DATABASE.md",
+        "docs/algorithms/REPORTS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M02-03",
+      "file": "tasks/M02/M02-03.md",
+      "dependsOn": [
+        "M02-02"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/REPORTS.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M02-04",
+      "file": "tasks/M02/M02-04.md",
+      "dependsOn": [
+        "M02-03"
+      ],
+      "sourceDocs": [
+        "docs/requirements/USER-FLOWS.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M02-05",
+      "file": "tasks/M02/M02-05.md",
+      "dependsOn": [
+        "M02-04"
+      ],
+      "sourceDocs": [
+        "docs/testing/INTEGRATION-ACCEPTANCE.md",
+        "docs/algorithms/REPORTS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M03-01",
+      "file": "tasks/M03/M03-01.md",
+      "dependsOn": [
+        "M00-05",
+        "M02-05"
+      ],
+      "sourceDocs": [
+        "docs/requirements/PRD.md",
+        "docs/architecture/SYSTEM.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M03-02",
+      "file": "tasks/M03/M03-02.md",
+      "dependsOn": [
+        "M03-01"
+      ],
+      "sourceDocs": [
+        "docs/requirements/USER-FLOWS.md",
+        "docs/requirements/PRD.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M03-03",
+      "file": "tasks/M03/M03-03.md",
+      "dependsOn": [
+        "M03-02"
+      ],
+      "sourceDocs": [
+        "docs/requirements/PRD.md",
+        "docs/requirements/FEATURE-CATALOG.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M03-04",
+      "file": "tasks/M03/M03-04.md",
+      "dependsOn": [
+        "M03-03"
+      ],
+      "sourceDocs": [
+        "docs/requirements/USER-FLOWS.md",
+        "docs/architecture/SYSTEM.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M03-05",
+      "file": "tasks/M03/M03-05.md",
+      "dependsOn": [
+        "M03-04"
+      ],
+      "sourceDocs": [
+        "docs/testing/TEST-STRATEGY.md",
+        "docs/requirements/USER-FLOWS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M04-01",
+      "file": "tasks/M04/M04-01.md",
+      "dependsOn": [
+        "M02-05"
+      ],
+      "sourceDocs": [
+        "docs/requirements/PRD.md",
+        "docs/architecture/DOMAIN.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M04-02",
+      "file": "tasks/M04/M04-02.md",
+      "dependsOn": [
+        "M04-01"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/ALLOCATION.md",
+        "docs/algorithms/PRIORITY.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M04-03",
+      "file": "tasks/M04/M04-03.md",
+      "dependsOn": [
+        "M04-02",
+        "M01-06"
+      ],
+      "sourceDocs": [
+        "docs/architecture/DOMAIN.md",
+        "docs/architecture/DATABASE.md",
+        "docs/algorithms/ALLOCATION.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M04-04",
+      "file": "tasks/M04/M04-04.md",
+      "dependsOn": [
+        "M04-03"
+      ],
+      "sourceDocs": [
+        "docs/architecture/API.md",
+        "docs/architecture/DOMAIN.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M04-05",
+      "file": "tasks/M04/M04-05.md",
+      "dependsOn": [
+        "M04-04"
+      ],
+      "sourceDocs": [
+        "docs/requirements/USER-FLOWS.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M04-06",
+      "file": "tasks/M04/M04-06.md",
+      "dependsOn": [
+        "M04-05"
+      ],
+      "sourceDocs": [
+        "docs/testing/INTEGRATION-ACCEPTANCE.md",
+        "docs/architecture/DOMAIN.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M05-01",
+      "file": "tasks/M05/M05-01.md",
+      "dependsOn": [
+        "M04-06"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/REGISTRY.md",
+        "docs/architecture/DATABASE.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M05-02",
+      "file": "tasks/M05/M05-02.md",
+      "dependsOn": [
+        "M05-01"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/PRIORITY.md",
+        "docs/algorithms/SOURCES.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M05-03",
+      "file": "tasks/M05/M05-03.md",
+      "dependsOn": [
+        "M05-02",
+        "M02-05"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/FORECAST.md",
+        "docs/architecture/DOMAIN.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M05-04",
+      "file": "tasks/M05/M05-04.md",
+      "dependsOn": [
+        "M05-03",
+        "M04-06"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/ALLOCATION.md",
+        "docs/architecture/DOMAIN.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M05-05",
+      "file": "tasks/M05/M05-05.md",
+      "dependsOn": [
+        "M05-04"
+      ],
+      "sourceDocs": [
+        "docs/requirements/USER-FLOWS.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M05-06",
+      "file": "tasks/M05/M05-06.md",
+      "dependsOn": [
+        "M05-05"
+      ],
+      "sourceDocs": [
+        "docs/testing/INTEGRATION-ACCEPTANCE.md",
+        "docs/algorithms/ALLOCATION.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M06-01",
+      "file": "tasks/M06/M06-01.md",
+      "dependsOn": [
+        "M05-06"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/FORECAST.md",
+        "docs/requirements/USER-FLOWS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M06-02",
+      "file": "tasks/M06/M06-02.md",
+      "dependsOn": [
+        "M06-01"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/FORECAST.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M06-03",
+      "file": "tasks/M06/M06-03.md",
+      "dependsOn": [
+        "M06-02"
+      ],
+      "sourceDocs": [
+        "docs/requirements/PRD.md",
+        "docs/requirements/USER-FLOWS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M06-04",
+      "file": "tasks/M06/M06-04.md",
+      "dependsOn": [
+        "M06-03"
+      ],
+      "sourceDocs": [
+        "docs/requirements/PRD.md",
+        "docs/algorithms/FORECAST.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M06-05",
+      "file": "tasks/M06/M06-05.md",
+      "dependsOn": [
+        "M06-04"
+      ],
+      "sourceDocs": [
+        "docs/testing/INTEGRATION-ACCEPTANCE.md",
+        "docs/algorithms/FORECAST.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M07-01",
+      "file": "tasks/M07/M07-01.md",
+      "dependsOn": [
+        "M06-05"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/REPORTS.md",
+        "docs/architecture/DOMAIN.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M07-02",
+      "file": "tasks/M07/M07-02.md",
+      "dependsOn": [
+        "M07-01"
+      ],
+      "sourceDocs": [
+        "docs/algorithms/REPORTS.md",
+        "docs/algorithms/SOURCES.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M07-03",
+      "file": "tasks/M07/M07-03.md",
+      "dependsOn": [
+        "M07-02"
+      ],
+      "sourceDocs": [
+        "docs/requirements/USER-FLOWS.md",
+        "docs/architecture/SECURITY.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M07-04",
+      "file": "tasks/M07/M07-04.md",
+      "dependsOn": [
+        "M07-03"
+      ],
+      "sourceDocs": [
+        "docs/requirements/USER-FLOWS.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M07-05",
+      "file": "tasks/M07/M07-05.md",
+      "dependsOn": [
+        "M07-04"
+      ],
+      "sourceDocs": [
+        "docs/testing/INTEGRATION-ACCEPTANCE.md",
+        "docs/algorithms/REPORTS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M08-01",
+      "file": "tasks/M08/M08-01.md",
+      "dependsOn": [
+        "M07-05"
+      ],
+      "sourceDocs": [
+        "docs/architecture/SECURITY.md",
+        "docs/decisions/OPEN-DECISIONS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M08-02",
+      "file": "tasks/M08/M08-02.md",
+      "dependsOn": [
+        "M08-01"
+      ],
+      "sourceDocs": [
+        "docs/architecture/SECURITY.md",
+        "docs/architecture/API.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M08-03",
+      "file": "tasks/M08/M08-03.md",
+      "dependsOn": [
+        "M08-02"
+      ],
+      "sourceDocs": [
+        "docs/architecture/SECURITY.md",
+        "docs/architecture/DATABASE.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M08-04",
+      "file": "tasks/M08/M08-04.md",
+      "dependsOn": [
+        "M08-03"
+      ],
+      "sourceDocs": [
+        "docs/architecture/SECURITY.md",
+        "docs/requirements/PRD.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M08-05",
+      "file": "tasks/M08/M08-05.md",
+      "dependsOn": [
+        "M08-04"
+      ],
+      "sourceDocs": [
+        "docs/testing/TEST-STRATEGY.md",
+        "docs/architecture/SECURITY.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M09-01",
+      "file": "tasks/M09/M09-01.md",
+      "dependsOn": [
+        "M08-05"
+      ],
+      "sourceDocs": [
+        "docs/architecture/DEPLOYMENT.md",
+        "docs/architecture/SECURITY.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M09-02",
+      "file": "tasks/M09/M09-02.md",
+      "dependsOn": [
+        "M09-01"
+      ],
+      "sourceDocs": [
+        "docs/testing/INTEGRATION-ACCEPTANCE.md",
+        "docs/requirements/USER-FLOWS.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M09-03",
+      "file": "tasks/M09/M09-03.md",
+      "dependsOn": [
+        "M09-02"
+      ],
+      "sourceDocs": [
+        "docs/architecture/DEPLOYMENT.md",
+        "docs/algorithms/ALLOCATION.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M09-04",
+      "file": "tasks/M09/M09-04.md",
+      "dependsOn": [
+        "M09-03"
+      ],
+      "sourceDocs": [
+        "docs/architecture/SECURITY.md",
+        "docs/architecture/DEPLOYMENT.md"
+      ],
+      "parallelizable": false
+    },
+    {
+      "id": "M09-05",
+      "file": "tasks/M09/M09-05.md",
+      "dependsOn": [
+        "M09-04"
+      ],
+      "sourceDocs": [
+        "docs/roadmap/ROADMAP.md",
+        "docs/testing/TEST-STRATEGY.md"
+      ],
+      "parallelizable": false
+    }
+  ]
+}

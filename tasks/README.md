@@ -5,17 +5,23 @@
 | Task | State | Approval / evidence |
 | --- | --- | --- |
 | `M00-BOOTSTRAP-000` | Verified | Authorized by the user's master-prompt request; skeleton and documentation checks passed; see project status |
-| `M00-01` | Proposed | Awaiting formal specification and human approval |
+| `M00-01` | Verified | Authorized 2026-10-30; Windows install, frozen lockfile, compile and 7/7 focused tests passed |
+| `M00-02` | Verified locally; human UX PASS | Windows shared startup, 15/15 tests and real browser outage/retry passed. User explicitly confirmed UX acceptance on 2026-10-31. |
+| `M00-03` | Verified locally | Implementation checks passed; user explicitly approved the concrete API contract on 2026-10-31. Git delivery/CI are reported separately. |
+| `M00-04` | Verified locally | 48/48 tests, startup rejection and 18/18 live HTTP checks passed. Manual checkpoint WAIVED_BY_USER on 2026-11-01. Git delivery/CI are separate. |
+| `M00-05` | Verified locally | Authorized 2026-11-02; format/lint/typecheck/build, 48 Node + 3 Vitest + 2 harness + 6 Playwright cases passed. Exact-SHA Ubuntu/Windows CI must pass after push before M00 closure. |
 
-No executable feature-Step specification has been approved. The bootstrap
-authorization does not authorize `M00-01` or any later task. See
+The user designated [Delivery2's task index](../.ai/FinPath_Delivery2_v1/tasks/INDEX.md)
+as the source of task order and dependencies. Execute only the explicitly
+requested Step and resolve its source links relative to that delivery directory.
+See
 [project status](../docs/PROJECT-STATUS.md) for command results and blockers.
 
 ## Candidate roadmap only
 
-These 53 candidate Steps are planning counts, not executable task files.
-Exact IDs, order, interfaces, scope and acceptance tests will be finalized in the
-separate formal document delivery. Every milestone below remains Proposed.
+The summary below preserves the initial planning counts. Delivery2 now supplies
+the 53 individual Step files; its index governs the order and dependencies.
+Delivery of a specification is not blanket approval of the remaining roadmap.
 
 | Milestone | Candidate Steps | Planned area |
 | --- | ---: | --- |

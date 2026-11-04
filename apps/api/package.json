@@ -1,0 +1,20 @@
+{
+  "name": "@finpath/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/dev.ts",
+    "start": "node dist/dev.js"
+  },
+  "dependencies": {
+    "@finpath/core": "workspace:*",
+    "@finpath/contracts": "workspace:*",
+    "@finpath/persistence": "workspace:*",
+    "@hono/node-server": "2.1.5",
+    "hono": "4.13.14"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2"
+  }
+}
