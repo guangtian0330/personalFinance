@@ -2,6 +2,29 @@ export type { AuthContext, AuthProvider } from './auth/index.js';
 export type { Account, AccountKind } from './accounts/index.js';
 export { ACCOUNT_KINDS } from './accounts/index.js';
 export {
+  createCardSettlementTransaction,
+  createExpenseRefundTransaction,
+  createExpenseTransaction,
+  createIncomeTransaction,
+  createJournalTransaction,
+  createLoanPaymentTransaction,
+  createReversalTransaction,
+  createTransferTransaction,
+  getAccountBalance,
+  JOURNAL_KINDS,
+} from './ledger/index.js';
+export type {
+  JournalInput,
+  JournalKind,
+  JournalReversal,
+  JournalStatus,
+  JournalTransaction,
+  Posting,
+  PostingDraft,
+  PostingSide,
+  TransactionAmounts,
+} from './ledger/index.js';
+export {
   addMoney,
   compareMoney,
   convertMinorUnits,
