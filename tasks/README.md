@@ -5,11 +5,12 @@
 | Task | State | Approval / evidence |
 | --- | --- | --- |
 | `M00-BOOTSTRAP-000` | Verified | Authorized by the user's master-prompt request; skeleton and documentation checks passed; see project status |
-| `M00-01` | Verified | Authorized 2026-10-30; Windows install, frozen lockfile, compile and 7/7 focused tests passed |
-| `M00-02` | Verified locally; human UX PASS | Windows shared startup, 15/15 tests and real browser outage/retry passed. User explicitly confirmed UX acceptance on 2026-10-31. |
-| `M00-03` | Verified locally | Implementation checks passed; user explicitly approved the concrete API contract on 2026-10-31. Git delivery/CI are reported separately. |
-| `M00-04` | Verified locally | 48/48 tests, startup rejection and 18/18 live HTTP checks passed. Manual checkpoint WAIVED_BY_USER on 2026-11-01. Git delivery/CI are separate. |
-| `M00-05` | Verified locally | Authorized 2026-11-02; format/lint/typecheck/build, 48 Node + 3 Vitest + 2 harness + 6 Playwright cases passed. Exact-SHA Ubuntu/Windows CI must pass after push before M00 closure. |
+| `M00-01` | Integrated | PR #1 merged to `main` on 2026-11-03; verified Windows install, frozen lockfile, compile and 7/7 focused tests |
+| `M00-02` | Integrated; human UX PASS | PR #1 merged; Windows shared startup, 15/15 tests and real browser outage/retry passed. User confirmed UX acceptance on 2026-10-31. |
+| `M00-03` | Integrated | PR #1 merged; implementation checks passed and user approved concrete API contract on 2026-10-31. |
+| `M00-04` | Integrated | PR #1 merged; 48/48 tests, startup rejection and 18/18 live HTTP checks passed. Manual checkpoint WAIVED_BY_USER on 2026-11-01. |
+| `M00-05` | Integrated | [PR #1](https://github.com/guangtian0330/personalFinance/pull/1), merge `844f81f51e2d2353811536bd95628542faedf301`; exact-SHA Ubuntu/Windows CI passed. |
+| `M01-01` | Verified locally | Five focused money tests plus full regression/type/build/lint/format passed; branch/commit/PR/CI are recorded in project status after delivery. |
 
 The user designated [Delivery2's task index](../.ai/FinPath_Delivery2_v1/tasks/INDEX.md)
 as the source of task order and dependencies. Execute only the explicitly
@@ -51,9 +52,9 @@ last. Formal Step files must provide exact prerequisites.
 3. Include every required field below and record approval before execution.
 4. Execute only the explicitly requested Step after prerequisites are verified.
    Read `AGENTS.md`, that Step and its referenced sources/relevant code only.
-5. Run the Step's checks, inspect diffs, update this index and project status with
-   actual evidence, report limitations and stop. A further Step requires a new
-   explicit user instruction. Contract and migration changes need review gates.
+5. Run the Step's checks, inspect diffs, update project status with actual
+   evidence, report limitations and stop. A further Step requires a new explicit
+   user instruction. Contract and migration changes need review gates.
 
 Required fields: `taskId`, `milestone`, `goal`, `requirements`, `prerequisites`,
 `sourceDocs`, `allowedFiles`, `protectedFiles`, `inputs`, `outputs`, `contracts`,
@@ -79,3 +80,22 @@ Keep bootstrap and financial ledger/domain-invariant work sequential. Later
 parallel code-writing tasks require approved independent scope, disjoint file
 ownership, stable contracts/tests and separate branches/worktrees, followed by
 one integration review and complete tests.
+
+## Permanent Git workflow
+
+For each explicitly authorized Step: start from latest integrated `main`, create
+one task branch, implement and verify the scoped change, commit once, push it,
+create or reuse a PR targeting `main`, verify exact-SHA required CI, apply the
+risk gate, report, and stop. Never force-push or automatically start the next
+Step. Maintain the complete 53-Step status table and M00-M09 integration counts
+in [project status](../docs/PROJECT-STATUS.md), with Integrated reserved for work
+actually merged to `main`.
+
+Automatic PR merge is allowed only when the Step is explicitly low risk and
+eligible for automatic integration, all required checks pass, the PR has no
+conflicts or unrelated changes, and no protected financial, security, database
+or architecture contract is changed. Human merge approval is required for
+financial algorithms/ledger invariants, goal priority/allocation, schemas and
+migrations, authentication/authorization, security-sensitive work, destructive
+data changes, or major architecture changes. Approval for one named PR does not
+authorize another merge. Do not bypass branch protection or required checks.

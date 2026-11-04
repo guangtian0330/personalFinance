@@ -46,15 +46,24 @@
    commit. Keep local verification, delivery, CI and human acceptance separate;
    never invent human signoff or embed a commit's own unknown SHA in its contents.
 8. Under the standing user request, every successfully verified Step ends with
-   one logical task commit and an ordinary push to its current authorized remote
-   branch. Stage explicit task-owned paths; inspect the staged diff and secrets.
-   No commit/push on required local check failure. Preserve the local SHA on push
-   failure; retry the same delivery, not duplicate implementation/commits. Check
-   required remote CI after push for that SHA; failures/pending required CI block
-   milestone closure and the next Step, not creation of the initial commit.
-   No automatic force-push, merge, PR, tag, release, deployment or cloud resources.
-9. Report changed files, behavior, commands/results, contracts, commit SHA,
-   remote branch/push, CI/manual status, limitations and next suggested Step.
+   one logical task commit, ordinary push to its current authorized remote branch,
+   and a PR targeting `main`. Stage explicit task-owned paths; inspect the staged
+   diff and secrets. No commit/push on required local check failure. Preserve the
+   local SHA on push failure; retry the same delivery, not duplicate implementation/
+   commits. Check required remote CI for that SHA; failures/pending CI block
+   integration and the next Step, not creation of the initial commit.
+9. Merge only after exact-SHA required CI passes and the PR has no conflicts or
+   unrelated changes. Auto-merge is permitted only for a Step explicitly marked
+   low risk and eligible for automatic integration, with no protected financial,
+   security, database or architectural contract changes. Require human approval
+   for financial algorithms/ledger invariants, goal priority/allocation, schemas/
+   migrations, authentication/authorization, security-sensitive, destructive-data
+   or major architectural changes. A task-specific user approval can authorize
+   one named integration only; it does not change this standing policy.
+   Never force-push, bypass checks or protection, release, deploy, tag or create
+   cloud resources without separate authorization.
+10. Report changed files, behavior, commands/results, contracts, commit SHA,
+   branch/push, PR, CI/manual status, merge state, limitations and next suggested Step.
    STOP. A new explicit Step instruction is required; bare "continue" is not one.
 
 Each future Step must declare: `taskId`, `milestone`, `goal`, `requirements`,

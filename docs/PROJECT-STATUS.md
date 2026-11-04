@@ -1,12 +1,12 @@
 # FinPath project status
 
-Updated: 2026-11-02 (America/Toronto).
+Updated: 2026-11-03 (America/Toronto).
 
 ## Current stage
 
-- Task: `M00-05` — CI, formatting and test harness.
-- Local state: Verified. Matrix manual state: NOT_APPLICABLE (N). No API,
-  data/schema or product contract changed.
+- Task: `M01-01` — Money, currencies, scales and rounding. M00-05 is integrated.
+- M01-01 local state: Verified. User-approved representation/rounding design
+  review is recorded; PR merge still requires approval under the high-risk policy.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -18,7 +18,117 @@ Updated: 2026-11-02 (America/Toronto).
 - Git delivery: this M00-05 task commit includes local evidence; actual SHA,
   push and CI results are reported after delivery. M00 closure requires both
   exact-SHA `verify (ubuntu-latest)` / `verify (windows-latest)` jobs to succeed.
-- Next suggested task: `M01-01`, not authorized or executed.
+- Next suggested task: `M01-02` after M01-01 PR review and integration; not executed.
+
+## Permanent progress checklist and full Step status
+
+Updated: 2026-11-03 (America/Toronto). `M00-BOOTSTRAP-000` is complete and is
+outside the 53 Steps. Status meanings: Pending, In Progress, Blocked, Failed,
+Verified (required local gates), Delivered (verified, committed, pushed and PR
+created), Integrated (merged to main). The exact SHA, PR, push and CI evidence
+for current work is recorded below and in the completion report; unknown commit
+SHAs are not written into their own commit.
+
+| Milestone | Area | Integrated |
+| --- | --- | ---: |
+| M00 | Foundation | 5/5 Integrated |
+| M01 | Ledger | 0/6 Integrated |
+| M02 | Budget | 0/5 Integrated |
+| M03 | Onboarding | 0/5 Integrated |
+| M04 | Goals | 0/6 Integrated |
+| M05 | Allocation | 0/6 Integrated |
+| M06 | Forecasting | 0/5 Integrated |
+| M07 | Assets / Data | 0/5 Integrated |
+| M08 | Authentication / Security | 0/5 Integrated |
+| M09 | Integration / Release | 0/5 Integrated |
+
+### All 53 planned Steps
+
+| Task | Title | Dependencies | Status | Evidence |
+| --- | --- | --- | --- | --- |
+| M00-01 | Initialize pnpm workspace and strict TypeScript | M00-BOOTSTRAP-000 | Integrated | PR #1 merged to main (2026-11-03) |
+| M00-02 | Scaffold Web and Hono API smoke | M00-01 | Integrated | PR #1 merged to main (2026-11-03) |
+| M00-03 | Contract package + typed errors | M00-02 | Integrated | PR #1 merged to main (2026-11-03) |
+| M00-04 | Auth adapter interface with dev-only mock | M00-03 | Integrated | PR #1 merged to main (2026-11-03) |
+| M00-05 | CI, formatting and test harness | M00-04 | Integrated | PR #1 merged to main (2026-11-03) |
+| M01-01 | Money, currencies, scales and rounding | M00-05 | Verified | Local gates passed; delivery follows |
+| M01-02 | Accounts and tenant-aware base schema | M01-01 | Pending | Not started |
+| M01-03 | Balanced journal and reversal domain | M01-02 | Pending | Not started |
+| M01-04 | Ledger REST endpoints and idempotency | M01-03 | Pending | Not started |
+| M01-05 | Accounts and transactions UI | M01-04 | Pending | Not started |
+| M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Pending | Not started |
+| M02-01 | Default financial category trees | M01-06 | Pending | Not started |
+| M02-02 | Budget period/version domain | M02-01 | Pending | Not started |
+| M02-03 | Budget actual and variance query | M02-02 | Pending | Not started |
+| M02-04 | Budget UI and monthly overview | M02-03 | Pending | Not started |
+| M02-05 | Budget/ledger cross-module regression | M02-04 | Pending | Not started |
+| M03-01 | Feature manifest and dependency policy | M00-05, M02-05 | Pending | Not started |
+| M03-02 | Three-screen skippable onboarding | M03-01 | Pending | Not started |
+| M03-03 | Explainable module recommendations | M03-02 | Pending | Not started |
+| M03-04 | Personalized dashboard/navigation | M03-03 | Pending | Not started |
+| M03-05 | Onboarding E2E, privacy and a11y | M03-04 | Pending | Not started |
+| M04-01 | Goal aggregate and lifecycle state machine | M02-05 | Pending | Not started |
+| M04-02 | Deadline horizon and monthly gap | M04-01 | Pending | Not started |
+| M04-03 | Virtual goal reservation event ledger | M04-02, M01-06 | Pending | Not started |
+| M04-04 | Atomic 3-active-goal limit and lifecycle APIs | M04-03 | Pending | Not started |
+| M04-05 | Goal creation and management UI | M04-04 | Pending | Not started |
+| M04-06 | Funding pools + ledger integration gate | M04-05 | Pending | Not started |
+| M05-01 | Algorithm registry and decision trace schema | M04-06 | Pending | Not started |
+| M05-02 | Priority score and urgency evidence | M05-01 | Pending | Not started |
+| M05-03 | Safe allocatable monthly cash and risk labels | M05-02, M02-05 | Pending | Not started |
+| M05-04 | Deterministic constrained goal allocation rules | M05-03, M04-06 | Pending | Not started |
+| M05-05 | Plan comparison, confirm and decision history UI | M05-04 | Pending | Not started |
+| M05-06 | Algorithm properties and end-to-end allocation gate | M05-05 | Pending | Not started |
+| M06-01 | Recurring income, expenses and monthly cash forecast | M05-06 | Pending | Not started |
+| M06-02 | Detached scenario simulation | M06-01 | Pending | Not started |
+| M06-03 | Car-purchase transition to recurring operating costs | M06-02 | Pending | Not started |
+| M06-04 | Retirement transition budget preview | M06-03 | Pending | Not started |
+| M06-05 | Scenario vs official plan integration gate | M06-04 | Pending | Not started |
+| M07-01 | Assets/liabilities/net worth historical views | M06-05 | Pending | Not started |
+| M07-02 | FX snapshots and performance disclosures | M07-01 | Pending | Not started |
+| M07-03 | CSV import dry-run and duplicate detection | M07-02 | Pending | Not started |
+| M07-04 | JSON/CSV export and safe restore validation | M07-03 | Pending | Not started |
+| M07-05 | Annual summary and import/export regression gate | M07-04 | Pending | Not started |
+| M08-01 | Select and validate real authentication adapter | M07-05 | Pending | Not started |
+| M08-02 | Registration/login/logout/password recovery | M08-01 | Pending | Not started |
+| M08-03 | Resource-level tenant isolation and roles | M08-02 | Pending | Not started |
+| M08-04 | Rate limits, retention/deletion and audit controls | M08-03 | Pending | Not started |
+| M08-05 | Security regression and release authorization gate | M08-04 | Pending | Not started |
+| M09-01 | Reproducible preview deployment and migrations | M08-05 | Pending | Not started |
+| M09-02 | Full accounting-to-goal E2E acceptance | M09-01 | Pending | Not started |
+| M09-03 | Cloud quota/performance and stress evaluation | M09-02 | Pending | Not started |
+| M09-04 | Backup/recovery and operations handbook | M09-03 | Pending | Not started |
+| M09-05 | Final release review and version tag proposal | M09-04 | Pending | Not started |
+
+## M00-05 integration and M01-01 verification
+
+M00-05 PR [#1](https://github.com/guangtian0330/personalFinance/pull/1) was
+merged to `main` after the pushed branch SHA `dd90ac5637222dacb0d7c9b07897d56d36ae2b15`
+passed both Ubuntu and Windows CI jobs with no conflicts. Merge commit:
+`844f81f51e2d2353811536bd95628542faedf301`; local `main` fast-forwarded to the
+same `origin/main` SHA. All five M00 Steps are included in that integration.
+
+M01-01 uses the approved policy: internal `bigint` minor units; exact major-unit
+decimal-string input (no implicit rounding); CAD/CNY scale 2 and JPY scale 0;
+JSON minor units as canonical integer strings; SQLite signed int64 bounds;
+same-currency-only arithmetic; conversion rounding half away from zero. Manual
+review for this concrete representation/rounding design was approved by the user.
+Because M01-01 changes financial primitives, its PR merge remains subject to a
+separate human merge approval. No schema, migration, API contract or live data
+changed.
+
+| Check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Result |
+| --- | --- |
+| `pnpm format:check` | Exit 0; 49 files formatted, no changes required. |
+| `pnpm lint` | Exit 0; 50 files, no warnings. Initial run found two prohibited non-null assertions; fixed and rerun successfully. |
+| `pnpm typecheck` | Exit 0; all workspace TypeScript references compile. |
+| `pnpm test` | Exit 0; 48/48 regression, 8/8 Vitest (including 5 M01-01), 2/2 harness; zero failed/skipped/cancelled. Includes TypeScript and web production build. |
+| `pnpm build` | Exit 0; TypeScript project build and Vite production bundle. |
+| Money vectors | CAD 1.23→123, CNY 1.23→123, JPY 123→123; mixed-currency rejection; ±0.5 ties round away from zero; safe-number and both int64 boundaries checked. |
+| E2E | Not run: core-only primitives have no UI/API consumer; existing E2E boundaries are unaffected. |
+
+M01-01 local verification is complete. Git delivery, exact-SHA remote CI and PR
+review are recorded after push; no M01-02 work has started.
 
 ## M00-05 local verification and CI gate
 
