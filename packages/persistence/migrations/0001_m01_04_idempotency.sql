@@ -1,0 +1,1 @@
+ALTER TABLE `journal_transactions` ADD `request_hash` text;
