@@ -10,6 +10,13 @@
     }
   },
   "dependencies": {
-    "@finpath/core": "workspace:*"
+    "@finpath/core": "workspace:*",
+    "drizzle-orm": "0.45.4"
+  },
+  "devDependencies": {
+    "drizzle-kit": "0.31.11"
+  },
+  "scripts": {
+    "db:generate": "drizzle-kit generate --config=drizzle.config.ts"
   }
 }

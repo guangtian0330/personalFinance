@@ -1,4 +1,6 @@
 export type { AuthContext, AuthProvider } from './auth/index.js';
+export type { Account, AccountKind } from './accounts/index.js';
+export { ACCOUNT_KINDS } from './accounts/index.js';
 export {
   addMoney,
   compareMoney,

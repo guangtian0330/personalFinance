@@ -4,9 +4,10 @@ Updated: 2026-11-03 (America/Toronto).
 
 ## Current stage
 
-- Task: `M01-01` — Money, currencies, scales and rounding. M00-05 is integrated.
-- M01-01 state: Delivered. User-approved representation/rounding design review
-  is recorded; PR #2 merge still requires human approval under the high-risk policy.
+- Task: `M01-02` — Accounts and tenant-aware base schema. M00-05 and M01-01 are integrated.
+- M01-02 state: Locally Verified on `codex/m01-02`; Drizzle SQLite migration,
+  in-memory tenant and opening-journal tests, workspace checks and regression gates pass.
+- M01-01 state: Integrated through PR #2; the M01 milestone has 1 of 6 Steps integrated.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -15,10 +16,9 @@ Updated: 2026-11-03 (America/Toronto).
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Git delivery: this M00-05 task commit includes local evidence; actual SHA,
-  push and CI results are reported after delivery. M00 closure requires both
-  exact-SHA `verify (ubuntu-latest)` / `verify (windows-latest)` jobs to succeed.
-- Next suggested task: `M01-02` after M01-01 PR review and integration; not executed.
+- Git delivery: M01-02 local verification is recorded below. Push, PR, exact-SHA
+  CI and merge status will be recorded after those actions complete.
+- Next task in the authorized M01 sequence: M01-03 after M01-02 integration.
 
 ## Permanent progress checklist and full Step status
 
@@ -32,7 +32,7 @@ SHAs are not written into their own commit.
 | Milestone | Area | Integrated |
 | --- | --- | ---: |
 | M00 | Foundation | 5/5 Integrated |
-| M01 | Ledger | 0/6 Integrated |
+| M01 | Ledger | 1/6 Integrated |
 | M02 | Budget | 0/5 Integrated |
 | M03 | Onboarding | 0/5 Integrated |
 | M04 | Goals | 0/6 Integrated |
@@ -51,8 +51,8 @@ SHAs are not written into their own commit.
 | M00-03 | Contract package + typed errors | M00-02 | Integrated | PR #1 merged to main (2026-11-03) |
 | M00-04 | Auth adapter interface with dev-only mock | M00-03 | Integrated | PR #1 merged to main (2026-11-03) |
 | M00-05 | CI, formatting and test harness | M00-04 | Integrated | PR #1 merged to main (2026-11-03) |
-| M01-01 | Money, currencies, scales and rounding | M00-05 | Delivered | `codex/m01-01`, implementation `6b7282cec200724a89e89662a2fea14b70d72910`; [PR #2](https://github.com/guangtian0330/personalFinance/pull/2); CI passed on SHA `e0b9c42b18feb5e9a6d514e5bbabee5a69e0cdd2` (Ubuntu + Windows) |
-| M01-02 | Accounts and tenant-aware base schema | M01-01 | Pending | Not started |
+| M01-01 | Money, currencies, scales and rounding | M00-05 | Integrated | PR #2 merged to `main` (2026-11-03), merge commit `9d143f6219f7beac5c8cb30bc7f6f6b3c98d57f7`; Ubuntu + Windows CI passed |
+| M01-02 | Accounts and tenant-aware base schema | M01-01 | Verified | `codex/m01-02`; fresh SQLite migration, balanced CAD opening journal, cross-workspace FK rejection and scoped account query passed; awaiting delivery |
 | M01-03 | Balanced journal and reversal domain | M01-02 | Pending | Not started |
 | M01-04 | Ledger REST endpoints and idempotency | M01-03 | Pending | Not started |
 | M01-05 | Accounts and transactions UI | M01-04 | Pending | Not started |
@@ -108,14 +108,15 @@ passed both Ubuntu and Windows CI jobs with no conflicts. Merge commit:
 `844f81f51e2d2353811536bd95628542faedf301`; local `main` fast-forwarded to the
 same `origin/main` SHA. All five M00 Steps are included in that integration.
 
-M01-01 uses the approved policy: internal `bigint` minor units; exact major-unit
+M01-01 used the approved policy: internal `bigint` minor units; exact major-unit
 decimal-string input (no implicit rounding); CAD/CNY scale 2 and JPY scale 0;
 JSON minor units as canonical integer strings; SQLite signed int64 bounds;
 same-currency-only arithmetic; conversion rounding half away from zero. Manual
 review for this concrete representation/rounding design was approved by the user.
-Because M01-01 changes financial primitives, its PR merge remains subject to a
-separate human merge approval. No schema, migration, API contract or live data
-changed.
+PR #2 was merged to `main` after the user's explicit one-time integration
+approval. Merge commit: `9d143f6219f7beac5c8cb30bc7f6f6b3c98d57f7`; the exact-SHA
+Ubuntu and Windows CI jobs passed. No schema, migration, API contract or live
+data changed in M01-01.
 
 | Check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Result |
 | --- | --- |
@@ -132,9 +133,43 @@ M01-01 local verification and delivery are complete: commit
 and PR [#2](https://github.com/guangtian0330/personalFinance/pull/2) targets
 `main`. Exact-SHA CI passed on PR head
 `e0b9c42b18feb5e9a6d514e5bbabee5a69e0cdd2`: both Ubuntu and Windows checks
-completed every workflow step successfully, including E2E smoke. PR is mergeable
-with no conflict, but human approval is required due to financial primitives.
-No M01-02 work has started.
+completed every workflow step successfully, including E2E smoke. The PR merged
+without conflicts after the user's one-time approval. The integration commit's
+push-triggered Ubuntu and Windows workflows also passed.
+
+## M01-02 local verification
+
+Authorized by the user's approval to continue the complete M01 sequence. The
+current task branch is `codex/m01-02`, based on integrated M01-01 commit
+`9d143f6219f7beac5c8cb30bc7f6f6b3c98d57f7`. Pre-existing untracked Delivery2
+source files and ZIP remain outside this task.
+
+Added a pure-core `Account`/`AccountKind` contract and a Drizzle D1/SQLite schema
+for users, workspaces, memberships, accounts, opening-journal transactions and
+postings. Account IDs are workspace-scoped; posting foreign keys bind workspace,
+transaction, account and currency together. SQL checks restrict currencies to
+CAD/CNY/JPY, account kinds to the five internal posting classes, and postings to
+positive integer minor units. Opening balances remain postings against equity;
+no account balance cache or cloud resource was created. `listAccountsForWorkspace`
+always applies the workspace filter.
+
+| Check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Result |
+| --- | --- |
+| Focused `vitest run packages/persistence/tests/M01-02.schema.vitest.test.mjs` | Exit 0; 4/4 tests: fresh migration, invalid workspace/account currency and zero posting rejected, CAD 10,000-minor-unit opening debit equals equity credit, cross-workspace reference rejected without a row, and account list scoped to workspace. |
+| `pnpm --filter @finpath/persistence run db:generate` | Exit 0; Drizzle reports 6 tables and no schema changes after generation. |
+| `pnpm format:check` / `pnpm lint` | Exit 0; 56 formatted / 57 linted files. |
+| `pnpm typecheck` | Exit 0; all workspace TypeScript references compile. Persistence skips external declaration checks for Drizzle's optional drivers. |
+| `pnpm build` | Exit 0; TypeScript and web production bundle. |
+| `pnpm test` | Exit 0; 48/48 Node regressions, 12/12 Vitest (including four M01-02 tests), 2/2 harness. |
+| `pnpm test:e2e` | Started but produced no test output; interrupted. Not a required M01-02 gate because no UI/API flow changed. Exact-SHA CI will still run the repository E2E suite. |
+| D1/live migration | Not run; this Step requires only local generated SQL and in-memory SQLite, and no cloud environment was authorized. |
+
+The first typecheck surfaced external Drizzle declaration errors under TypeScript
+6; setting `skipLibCheck` only for the persistence project resolved those
+third-party declaration diagnostics while preserving checking of project source.
+pnpm's initial dependency add also hit the Windows sandbox symlink boundary; the
+native frozen-lockfile install succeeded after `esbuild` was explicitly allowed
+in the workspace build-script policy.
 
 ## M00-05 local verification and CI gate
 
