@@ -10,7 +10,7 @@
 | `M00-03` | Integrated | PR #1 merged; implementation checks passed and user approved concrete API contract on 2026-10-31. |
 | `M00-04` | Integrated | PR #1 merged; 48/48 tests, startup rejection and 18/18 live HTTP checks passed. Manual checkpoint WAIVED_BY_USER on 2026-11-01. |
 | `M00-05` | Integrated | [PR #1](https://github.com/guangtian0330/personalFinance/pull/1), merge `844f81f51e2d2353811536bd95628542faedf301`; exact-SHA Ubuntu/Windows CI passed. |
-| `M01-01` | Delivered; CI pending; human merge approval required | `codex/m01-01`, commit `6b7282cec200724a89e89662a2fea14b70d72910`, [PR #2](https://github.com/guangtian0330/personalFinance/pull/2); five focused money tests plus full regression/type/build/lint/format passed. |
+| `M01-01` | Delivered; CI passed; human merge approval required | `codex/m01-01`, commit `6b7282cec200724a89e89662a2fea14b70d72910`, [PR #2](https://github.com/guangtian0330/personalFinance/pull/2); Ubuntu/Windows CI passed on `e0b9c42`; all local M01-01 checks passed. |
 
 The user designated [Delivery2's task index](../.ai/FinPath_Delivery2_v1/tasks/INDEX.md)
 as the source of task order and dependencies. Execute only the explicitly

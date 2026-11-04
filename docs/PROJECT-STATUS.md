@@ -51,7 +51,7 @@ SHAs are not written into their own commit.
 | M00-03 | Contract package + typed errors | M00-02 | Integrated | PR #1 merged to main (2026-11-03) |
 | M00-04 | Auth adapter interface with dev-only mock | M00-03 | Integrated | PR #1 merged to main (2026-11-03) |
 | M00-05 | CI, formatting and test harness | M00-04 | Integrated | PR #1 merged to main (2026-11-03) |
-| M01-01 | Money, currencies, scales and rounding | M00-05 | Delivered | `codex/m01-01`, implementation `6b7282cec200724a89e89662a2fea14b70d72910`; [PR #2](https://github.com/guangtian0330/personalFinance/pull/2); exact-SHA CI pending |
+| M01-01 | Money, currencies, scales and rounding | M00-05 | Delivered | `codex/m01-01`, implementation `6b7282cec200724a89e89662a2fea14b70d72910`; [PR #2](https://github.com/guangtian0330/personalFinance/pull/2); CI passed on SHA `e0b9c42b18feb5e9a6d514e5bbabee5a69e0cdd2` (Ubuntu + Windows) |
 | M01-02 | Accounts and tenant-aware base schema | M01-01 | Pending | Not started |
 | M01-03 | Balanced journal and reversal domain | M01-02 | Pending | Not started |
 | M01-04 | Ledger REST endpoints and idempotency | M01-03 | Pending | Not started |
@@ -130,9 +130,11 @@ changed.
 M01-01 local verification and delivery are complete: commit
 `6b7282cec200724a89e89662a2fea14b70d72910` was pushed to `origin/codex/m01-01`
 and PR [#2](https://github.com/guangtian0330/personalFinance/pull/2) targets
-`main`. Exact-SHA CI is running; its current report is `PUSHED_CI_PENDING`. PR
-is mergeable with no conflict, but human approval is required due to financial
-primitives. No M01-02 work has started.
+`main`. Exact-SHA CI passed on PR head
+`e0b9c42b18feb5e9a6d514e5bbabee5a69e0cdd2`: both Ubuntu and Windows checks
+completed every workflow step successfully, including E2E smoke. PR is mergeable
+with no conflict, but human approval is required due to financial primitives.
+No M01-02 work has started.
 
 ## M00-05 local verification and CI gate
 
