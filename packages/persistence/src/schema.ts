@@ -1,9 +1,9 @@
 import { sql } from 'drizzle-orm';
 import {
   check,
+  customType,
   foreignKey,
   index,
-  integer,
   primaryKey,
   sqliteTable,
   text,
@@ -11,6 +11,17 @@ import {
 } from 'drizzle-orm/sqlite-core';
 
 const currencyCheck = sql`IN ('CAD', 'CNY', 'JPY')`;
+const int64Money = customType<{ data: bigint; driverData: string }>({
+  dataType: () => 'integer',
+  toDriver: (value) => value.toString(),
+  fromDriver: (value) => {
+    const driverValue: unknown = value;
+    if (typeof driverValue === 'number' && !Number.isSafeInteger(driverValue)) {
+      throw new RangeError('SQLite returned an unsafe numeric amount; read int64 values as text');
+    }
+    return BigInt(driverValue as string | number | bigint);
+  },
+});
 
 export const users = sqliteTable('users', {
   id: text('id').primaryKey(),
@@ -99,6 +110,7 @@ export const journalTransactions = sqliteTable(
     description: text('description').notNull(),
     reversalOfId: text('reversal_of_id'),
     idempotencyKey: text('idempotency_key'),
+    requestHash: text('request_hash'),
     createdAt: text('created_at').notNull().default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [
@@ -121,7 +133,7 @@ export const postings = sqliteTable(
     transactionId: text('transaction_id').notNull(),
     accountId: text('account_id').notNull(),
     side: text('side').notNull(),
-    amountMinor: integer('amount_minor').notNull(),
+    amountMinor: int64Money('amount_minor').notNull(),
     currency: text('currency').notNull(),
   },
   (table) => [

@@ -4,10 +4,11 @@ Updated: 2026-11-03 (America/Toronto).
 
 ## Current stage
 
-- Task: `M01-03` — Balanced journal and reversal domain. M00-05, M01-01 and M01-02 are integrated.
-- M01-03 state: Locally Verified on `codex/m01-03`; balanced journal, reversal,
-  refund, transfer, loan-payment and card-settlement tests pass.
-- M01 milestone: 2 of 6 Steps integrated; M01-03 delivery is pending.
+- Task: `M01-04` — Ledger REST endpoints and idempotency. M00-05 and M01-01
+  through M01-03 are integrated.
+- M01-04 state: Locally Verified on `codex/m01-04`; typed ledger endpoints,
+  tenant scoping, atomic writes, idempotency and cursor pagination pass focused tests.
+- M01 milestone: 3 of 6 Steps integrated; M01-04 delivery is pending.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -16,9 +17,9 @@ Updated: 2026-11-03 (America/Toronto).
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Git delivery: M01-02 local verification is recorded below. Push, PR, exact-SHA
-  CI and merge status will be recorded after those actions complete.
-- Next task in the authorized M01 sequence: M01-03 after M01-02 integration.
+- Git delivery: M01-03 is integrated through PR #4 with both required CI jobs
+  passing. M01-04 push, PR, exact-SHA CI and merge status are pending.
+- Next task in the authorized M01 sequence: M01-05 after M01-04 integration.
 
 ## Permanent progress checklist and full Step status
 
@@ -53,8 +54,8 @@ SHAs are not written into their own commit.
 | M00-05 | CI, formatting and test harness | M00-04 | Integrated | PR #1 merged to main (2026-11-03) |
 | M01-01 | Money, currencies, scales and rounding | M00-05 | Integrated | PR #2 merged to `main` (2026-11-03), merge commit `9d143f6219f7beac5c8cb30bc7f6f6b3c98d57f7`; Ubuntu + Windows CI passed |
 | M01-02 | Accounts and tenant-aware base schema | M01-01 | Integrated | PR #3 merged to `main` (2026-11-04), merge commit `135c90f50e3b91f823ebc1136bb14164128025b0`; Ubuntu + Windows CI passed |
-| M01-03 | Balanced journal and reversal domain | M01-02 | Verified | `codex/m01-03`; 9 focused deterministic ledger tests plus workspace regression/build/lint/typecheck passed; awaiting delivery |
-| M01-04 | Ledger REST endpoints and idempotency | M01-03 | Pending | Not started |
+| M01-03 | Balanced journal and reversal domain | M01-02 | Integrated | PR #4 merged to `main` (2026-11-03), merge commit `9418fd3b4de0eec4e90362bc86c7f5473a6dce54`; Ubuntu + Windows CI passed |
+| M01-04 | Ledger REST endpoints and idempotency | M01-03 | Verified | `codex/m01-04`; focused SQLite/D1 adapter integration, idempotency, tenant, pagination, int64 and rollback checks pass; awaiting delivery |
 | M01-05 | Accounts and transactions UI | M01-04 | Pending | Not started |
 | M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Pending | Not started |
 | M02-01 | Default financial category trees | M01-06 | Pending | Not started |
@@ -203,6 +204,56 @@ refund with a full reversal. No caller data is mutated.
 | `pnpm build` | Exit 0; TypeScript and web production bundle. |
 | `pnpm test` | Exit 0; 48/48 Node regressions, 21/21 Vitest (including nine M01-03 tests), 2/2 harness. |
 | E2E | Not run locally: M01-03 changes only the platform-neutral core and does not touch UI/API flows. Exact-SHA CI will run the repository E2E smoke. |
+
+M01-03 delivery: task commit `b2a7c94b9a2b26b230b583fe4e874c5103e27218`
+was pushed to `origin/codex/m01-03` and merged by PR
+[#4](https://github.com/guangtian0330/personalFinance/pull/4). PR-head CI run
+`41767543455` passed Ubuntu and Windows. Merge commit
+`9418fd3b4de0eec4e90362bc86c7f5473a6dce54` is on `origin/main`; push CI run
+`41767959508` also passed both platforms.
+
+## M01-04 local verification
+
+Authorized as the next Step in the user's standing instruction to execute the
+complete M01 series. Branch `codex/m01-04` starts from integrated main commit
+`9418fd3b4de0eec4e90362bc86c7f5473a6dce54`. The user approved the concrete
+contract and migration checkpoint in this conversation before implementation:
+workspace-scoped account/transaction reads, cursor paging, form-adapted
+income/expense/transfer writes, trusted actor/workspace context, required
+idempotency key and request fingerprint, 409 on key/body mismatch, hidden
+cross-workspace accounts, and atomic journal/posting commit. No arbitrary
+posting input is accepted.
+
+Added strict Zod request/response contracts and protected `/api/v1/private`
+routes. The service invokes M01-03 use cases, derives actor/workspace only from
+the auth context, filters archived accounts and scopes every query by workspace.
+Transaction pages use stable `(occurredAt,id)` descending cursors with bounded
+page sizes. A canonical SHA-256 fingerprint plus the existing unique
+`(workspace_id,idempotency_key)` index handles normalized retries and conflicts;
+the storage batch writes the journal header and all postings atomically. SQLite
+amounts remain signed int64 values: the Drizzle custom type binds exact decimal
+strings and reads `CAST(amount_minor AS TEXT)` before converting to BigInt. A
+nullable `request_hash` migration preserves existing journal rows.
+
+`createApp` receives a `LedgerRepository` dependency. Without a configured
+repository the protected ledger routes fail closed with 503; this checkout has
+no local D1 runtime/database binding. Integration tests use Drizzle's D1 adapter
+over a native in-memory SQLite database with atomic batch behavior. No cloud or
+real financial data was used.
+
+| Check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Result |
+| --- | --- |
+| Focused `vitest run packages/persistence/tests/M01-04.ledger.vitest.test.mjs packages/persistence/tests/M01-02.schema.vitest.test.mjs` | Exit 0; 15/15 tests for backward-compatible migration, scoped active accounts, historical opening-journal reads, missing-repository fail-closed response, balanced income/expense/card/transfer writes, normalized retry, mismatched-key conflict, simultaneous retries, malformed/foreign/cross-currency rejection, stable cursor pagination, int64 max and rollback after posting failure. |
+| `pnpm format:check` / `pnpm lint` | Exit 0 after fixing one unused import and annotating the journal type; 62 formatted / 63 linted files. |
+| `pnpm typecheck` | Exit 0; all workspace TypeScript references compile. |
+| `pnpm build` | Exit 0; TypeScript and web production bundle. |
+| `pnpm test` | Exit 0; 48/48 Node regressions, 32/32 Vitest, 2/2 harness. |
+| `pnpm test:e2e` | Exit 0 after allowing loopback test access; 6/6 existing M00-05 smoke cases passed at desktop and narrow viewports. The default sandbox denied the runner's own `127.0.0.1` health check with `EACCES`; the permitted local retry passed. No test listeners remain on ports 4173, 5173 or 8787. E2E does not exercise the new ledger routes. |
+| Migration generation | Exit 0; Drizzle generated one additive `request_hash` column migration. Fresh and existing-row upgrade cases pass in SQLite. |
+
+M01-04 remains local `Verified` until the task commit is pushed and PR CI for
+that exact SHA passes. Local server wiring to a real D1 database remains outside
+this Step; no deployment or database provisioning was requested.
 
 ## M00-05 local verification and CI gate
 
