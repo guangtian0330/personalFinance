@@ -4,10 +4,10 @@ Updated: 2026-11-03 (America/Toronto).
 
 ## Current stage
 
-- Task: `M01-02` — Accounts and tenant-aware base schema. M00-05 and M01-01 are integrated.
-- M01-02 state: Locally Verified on `codex/m01-02`; Drizzle SQLite migration,
-  in-memory tenant and opening-journal tests, workspace checks and regression gates pass.
-- M01-01 state: Integrated through PR #2; the M01 milestone has 1 of 6 Steps integrated.
+- Task: `M01-03` — Balanced journal and reversal domain. M00-05, M01-01 and M01-02 are integrated.
+- M01-03 state: Locally Verified on `codex/m01-03`; balanced journal, reversal,
+  refund, transfer, loan-payment and card-settlement tests pass.
+- M01 milestone: 2 of 6 Steps integrated; M01-03 delivery is pending.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -32,7 +32,7 @@ SHAs are not written into their own commit.
 | Milestone | Area | Integrated |
 | --- | --- | ---: |
 | M00 | Foundation | 5/5 Integrated |
-| M01 | Ledger | 1/6 Integrated |
+| M01 | Ledger | 2/6 Integrated |
 | M02 | Budget | 0/5 Integrated |
 | M03 | Onboarding | 0/5 Integrated |
 | M04 | Goals | 0/6 Integrated |
@@ -52,8 +52,8 @@ SHAs are not written into their own commit.
 | M00-04 | Auth adapter interface with dev-only mock | M00-03 | Integrated | PR #1 merged to main (2026-11-03) |
 | M00-05 | CI, formatting and test harness | M00-04 | Integrated | PR #1 merged to main (2026-11-03) |
 | M01-01 | Money, currencies, scales and rounding | M00-05 | Integrated | PR #2 merged to `main` (2026-11-03), merge commit `9d143f6219f7beac5c8cb30bc7f6f6b3c98d57f7`; Ubuntu + Windows CI passed |
-| M01-02 | Accounts and tenant-aware base schema | M01-01 | Verified | `codex/m01-02`; fresh SQLite migration, balanced CAD opening journal, cross-workspace FK rejection and scoped account query passed; awaiting delivery |
-| M01-03 | Balanced journal and reversal domain | M01-02 | Pending | Not started |
+| M01-02 | Accounts and tenant-aware base schema | M01-01 | Integrated | PR #3 merged to `main` (2026-11-04), merge commit `135c90f50e3b91f823ebc1136bb14164128025b0`; Ubuntu + Windows CI passed |
+| M01-03 | Balanced journal and reversal domain | M01-02 | Verified | `codex/m01-03`; 9 focused deterministic ledger tests plus workspace regression/build/lint/typecheck passed; awaiting delivery |
 | M01-04 | Ledger REST endpoints and idempotency | M01-03 | Pending | Not started |
 | M01-05 | Accounts and transactions UI | M01-04 | Pending | Not started |
 | M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Pending | Not started |
@@ -170,6 +170,39 @@ third-party declaration diagnostics while preserving checking of project source.
 pnpm's initial dependency add also hit the Windows sandbox symlink boundary; the
 native frozen-lockfile install succeeded after `esbuild` was explicitly allowed
 in the workspace build-script policy.
+
+M01-02 delivery: task commit `34da77c7c90da6327dc41586567c5b2e21499b9c` was
+pushed to `origin/codex/m01-02` and merged by PR
+[#3](https://github.com/guangtian0330/personalFinance/pull/3). PR-head CI run
+`41764939970` passed Ubuntu and Windows. Merge commit
+`135c90f50e3b91f823ebc1136bb14164128025b0` is on `origin/main`; push CI run
+`41765542193` also passed both platforms.
+
+## M01-03 local verification
+
+Authorized by the user's instruction to continue the complete M01 series. Branch
+`codex/m01-03` starts from integrated main commit
+`135c90f50e3b91f823ebc1136bb14164128025b0`. No API, database schema or migration
+changes are included.
+
+The pure-core ledger now constructs balanced income, expense/card-purchase,
+same-currency asset transfer, partial expense refund, exact reversal, loan
+principal/interest payment and card-settlement journals. It validates workspace
+ownership, account class/currency, positive int64 minor-unit postings and
+per-currency debit/credit equality. Refunds link to their original expense and
+cannot exceed its remaining amount. Reversal returns an immutable updated copy
+marking the original reversed plus a new transaction that links back and swaps
+every posting side; the supplied history blocks duplicate reversals and mixing a
+refund with a full reversal. No caller data is mutated.
+
+| Check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Result |
+| --- | --- |
+| Focused `vitest run packages/core/test/M01-03.ledger.vitest.test.mjs` | Exit 0; 9/9 tests across income/expense normal balances, transfer neutrality, partial refund, exact/duplicate reversal, loan principal and interest, card purchase/settlement, invalid and cross-currency journal rejection, int64 boundaries, tenant-scoped posting IDs and deterministic replay. |
+| `pnpm format:check` / `pnpm lint` | Exit 0; 58 formatted / 59 linted files. |
+| `pnpm typecheck` | Exit 0; all workspace TypeScript references compile. |
+| `pnpm build` | Exit 0; TypeScript and web production bundle. |
+| `pnpm test` | Exit 0; 48/48 Node regressions, 21/21 Vitest (including nine M01-03 tests), 2/2 harness. |
+| E2E | Not run locally: M01-03 changes only the platform-neutral core and does not touch UI/API flows. Exact-SHA CI will run the repository E2E smoke. |
 
 ## M00-05 local verification and CI gate
 
