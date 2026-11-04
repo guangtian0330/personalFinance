@@ -2,7 +2,7 @@
 
 ## Money
 
-Store money in minor-unit integer `amountMinor`. JSON transports it as integer decimal string. Currency scale from ISO-4217 metadata (`CAD=2`, `CNY=2`, `JPY=0`); all values labeled with currency. Addition requires identical currency; integer overflow/unsafe number conversions rejected. Non-integral FX results rounded at conversion boundary by a declared mode (baseline half-even, configurable per policy), never rounded each intermediate operation silently.
+Store money in minor-unit integer `amountMinor`. JSON transports it as integer decimal string. Currency scale from ISO-4217 metadata (`CAD=2`, `CNY=2`, `JPY=0`); all values labeled with currency. Addition requires identical currency; integer overflow/unsafe number conversions rejected. **M01-01 approved rule (2026-11-03):** input decimal strings must be exact at the currency's supported scale; do not round input. When a calculation needs rounding at a conversion boundary, use half away from zero. Never round intermediate operations silently. This approval defines the M01-01 core primitive; future FX rate provenance and conversion policy remain subject to their owning Step.
 
 ## Double-entry
 

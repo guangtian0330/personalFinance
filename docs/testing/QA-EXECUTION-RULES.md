@@ -8,8 +8,9 @@ required evidence; it does not claim future tests, scripts or features exist.
 
 The user explicitly invoked the [QA policy authoring prompt](../../.ai/FinPath_QA_Milestones_Codex_Prompt.md).
 Its standing authorization requires one logical commit and one ordinary push
-after every successfully verified Step, to the current authorized remote branch.
-This replaces generic no-automatic-push / fresh-permission-per-push wording in
+after every successfully verified Step, to the current authorized remote branch,
+followed by a PR targeting `main`. This replaces generic no-automatic-push /
+fresh-permission-per-push wording in
 the existing Delivery2 Step templates, addendum, START-HERE and older bootstrap
 instructions. Their other scope, prerequisite, architecture and security gates
 remain binding. Later direct user instructions may narrow or revoke this grant.
@@ -58,10 +59,12 @@ dependencies. Index display order does not create extra dependency edges.
    must be synthetic and redacted. No unsafe migration or authorization shortcut.
 7. Record local outcome, branch, commands/results, applicable gate IDs, human
    status and limitations in project status; update the existing task marker
-   only after actual verification. These updates belong in the same task commit.
+   only after actual verification. Include the Verified state in the task commit.
+   After push/PR creation, record Delivered, PR and CI state on the same branch as
+   needed; never embed a metadata commit's own unknown SHA in its contents.
 8. If every required local/design gate passes, perform the delivery protocol
-   below. Report its observed result and STOP. No next Step, automatic merge, PR,
-   tag, release, deployment or cloud-resource provisioning.
+   below, create a PR, and check exact-SHA CI. Merge only under the risk policy
+   below. Report the observed state and STOP; do not start the next Step.
 
 Remote CI is a **post-push** gate, including the first M00-05 workflow run.
 Validate workflow configuration and run its available checks locally before
@@ -161,7 +164,7 @@ it does not mean remote CI passed, UX was accepted or release was approved.
 | BLOCKED_COMMIT | Commit failed; retain files/index, report error, do not push |
 | NO_CHANGES | No task diff; report needs review; never create an empty commit |
 | PUSH_PENDING | Local commit exists but transport/auth/non-fast-forward failed; keep its SHA, resolve safely and retry that same push without duplicate implementation/commits |
-| PUSH_BLOCKED | Branch protection or policy denies push; report the intended PR workflow and stop; do not bypass protection or create/merge a PR without authorization |
+| PUSH_BLOCKED | Branch protection or policy denies push; report the intended PR workflow and stop; do not bypass protection. The standing workflow authorizes PR creation after successful push, but never bypasses merge approval. |
 | PUSHED_CI_PENDING | Push succeeded and remote checks are running; read their status for the exact SHA; next Step blocked until required checks pass |
 | PUSHED_CI_FAILED | Remote check failed; block next Step, inspect diagnostics, repair the same Step within authorized scope, make a focused corrective commit if needed; no history rewrite |
 | PUSHED_CI_UNKNOWN | Push succeeded but required CI is inaccessible/indeterminate; report access limit and block next Step until verified |
@@ -176,10 +179,10 @@ checks are `PUSHED_CI_UNKNOWN` or a configuration failure, not NOT_CONFIGURED.
 
 ## Commit, push and post-push CI
 
-The standing request covers ordinary successful Step commits/pushes, including
-this documentation assignment. Do not ask again merely because an older template
-says no automatic push. Tool sandbox/network approval may still be required;
-it does not grant force-push, production execution or a different destination.
+The standing request covers ordinary successful Step commits/pushes and PR
+creation. Do not ask again merely because an older template says no automatic
+push. Tool sandbox/network approval may still be required; this does not grant
+force-push, production execution or a different destination.
 
 1. Confirm exact current branch, authorized `origin`, clean/accounted-for state
    and the staged task-owned file list. Use explicit paths, never blind
@@ -193,8 +196,15 @@ it does not grant force-push, production execution or a different destination.
 3. Run `git commit`, then `git push origin HEAD` (or the verified upstream
    equivalent; `git push -u origin HEAD` may establish the authorized branch).
    On an authorized, unprotected main-only flow this may be main; on a task branch
-   push that branch only. No automatic merge or PR. Do not reset/rebase away user
-   work, amend a published commit, force push, or bypass server checks. If the
+   push that branch only. Create/reuse a PR targeting `main`; inspect its full diff
+   (including prerequisite commits), conflicts and exact-SHA required CI.
+   Auto-merge only if the Step is explicitly low risk and eligible, all checks
+   pass, no conflicts/unrelated changes exist, and no protected contract changes.
+   Otherwise stop at the PR for human approval. Require human approval for
+   financial algorithms/ledger invariants, goal priority/allocation, schemas/
+   migrations, auth/security, destructive data and major architecture. A specific
+   one-time user approval may authorize only the named merge. Do not reset/rebase
+   away user work, amend a published commit, force push or bypass checks. If the
    remote advanced, report divergence and prepare a safe resolution for review.
 4. Verify local HEAD matches the pushed remote branch and inspect remaining
    working-tree changes. Do not claim a completely clean tree if unrelated user
@@ -228,7 +238,7 @@ it does not grant force-push, production execution or a different destination.
 | M08-02 requires controlled staging before M09-01 | Use an existing separately authorized environment; otherwise `BLOCKED_ENV`. No implicit infrastructure provisioning or public mock identity. |
 | M09-03 has no numeric workload/thresholds; deployment quotas are dated | Before measuring acceptance, approve workload, dataset, concurrency, timing budget and current primary-source limits. Record measurement environment/date; no invented percent/latency/free-capacity guarantee. Optimization outside permitted surfaces needs a separate authorized change. |
 | Roadmap mentions possible parallel work; index/manifest mark all 53 nonparallel | Keep declared prerequisites and serial execution. This plan does not authorize parallel implementation or overlapping file ownership. |
-| Old generic templates forbid automatic push | The standing authorization above overrides only ordinary verified task delivery. Auth, migration, release, cloud and production approval gates remain. |
+| Old generic templates forbid PR creation or merges | The standing user workflow requires PRs and allows narrowly risk-gated auto-merge; high-risk categories still require human approval. Auth, migration, release, cloud and production restrictions remain. |
 
 These resolutions unblock authoring this plan. Unresolved product/environment/
 performance decisions block their owning future Steps when needed, not earlier
@@ -239,7 +249,7 @@ them as assertions; never modify expectations simply to match implementation.
 
 ```text
 Task ID/name | local state | branch | commit SHA
-Remote branch / push result | CI state and exact-SHA evidence
+Remote branch / push result | PR link/state | CI exact-SHA evidence | Merge/integration state
 Changed files and behavior | contract/migration changes or none
 Commands actually executed + exit/results | tests passed/failed/skipped/unavailable
 Verified invariants and regression radius | proof/artifact references
