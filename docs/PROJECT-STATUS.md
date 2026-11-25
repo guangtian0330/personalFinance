@@ -5,13 +5,10 @@ Updated: 2026-11-24 (America/Toronto).
 ## Current stage
 
 - Task: `M01-05` — Accounts and transactions UI. M00-05 and M01-01 through
-  M01-04 are integrated.
-- M01-05 state: implementation and required local verification are complete on
-  `codex/m01-05`; commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd` is pushed and
-  [PR #6](https://github.com/guangtian0330/personalFinance/pull/6) is open; its
-  exact-SHA CI is running and high-risk integration review is pending.
-- M01 milestone: 4 of 6 Steps integrated; M01-05 is Delivered and awaits exact-
-  SHA CI plus the high-risk merge gate.
+  M01-05 are integrated.
+- M01-05 state: Integrated through [PR #6](https://github.com/guangtian0330/personalFinance/pull/6),
+  merge commit `70bbc052ed8742d164d0b69831ce6324940fa3ab`.
+- M01 milestone: 5 of 6 Steps integrated; M01-06 has not started.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -20,10 +17,9 @@ Updated: 2026-11-24 (America/Toronto).
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Git delivery: M01-04 is integrated through PR #5. Both exact-SHA PR CI jobs
-  passed; merge commit is `085b48dee46d1d37334b073e73b18c558914dce3`.
-- Next task: complete M01-05 exact-SHA CI and integration review; do not start
-  M01-06 before M01-05 is integrated.
+- Git delivery: M01-05 is integrated through PR #6 after exact-head CI passed
+  on Ubuntu and Windows; merge commit is recorded above.
+- Next task: M01-06 is next in the delivery sequence and remains unstarted.
 
 ## Permanent progress checklist and full Step status
 
@@ -37,7 +33,7 @@ SHAs are not written into their own commit.
 | Milestone | Area | Integrated |
 | --- | --- | ---: |
 | M00 | Foundation | 5/5 Integrated |
-| M01 | Ledger | 4/6 Integrated |
+| M01 | Ledger | 5/6 Integrated |
 | M02 | Budget | 0/5 Integrated |
 | M03 | Onboarding | 0/5 Integrated |
 | M04 | Goals | 0/6 Integrated |
@@ -60,7 +56,7 @@ SHAs are not written into their own commit.
 | M01-02 | Accounts and tenant-aware base schema | M01-01 | Integrated | PR #3 merged to `main` (2026-11-04), merge commit `135c90f50e3b91f823ebc1136bb14164128025b0`; Ubuntu + Windows CI passed |
 | M01-03 | Balanced journal and reversal domain | M01-02 | Integrated | PR #4 merged to `main` (2026-11-03), merge commit `9418fd3b4de0eec4e90362bc86c7f5473a6dce54`; Ubuntu + Windows CI passed |
 | M01-04 | Ledger REST endpoints and idempotency | M01-03 | Integrated | [PR #5](https://github.com/guangtian0330/personalFinance/pull/5), commit `a291f8a0dab79c2e1e6eb547df61094ff8b2d157`, merge `085b48dee46d1d37334b073e73b18c558914dce3`; Ubuntu + Windows CI passed |
-| M01-05 | Accounts and transactions UI | M01-04 | Delivered | [PR #6](https://github.com/guangtian0330/personalFinance/pull/6), implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd`, pushed from `codex/m01-05`; local checks pass, exact-SHA CI is running, integration review pending |
+| M01-05 | Accounts and transactions UI | M01-04 | Integrated | [PR #6](https://github.com/guangtian0330/personalFinance/pull/6), implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd`, status commit `1facd75342b2dd5273b330f73a0ae4597c840c83`, merge commit `70bbc052ed8742d164d0b69831ce6324940fa3ab`; exact-SHA CI run 45540761957 passed Ubuntu and Windows |
 | M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Pending | Not started |
 | M02-01 | Default financial category trees | M01-06 | Pending | Not started |
 | M02-02 | Budget period/version domain | M02-01 | Pending | Not started |
@@ -288,11 +284,12 @@ data was added. The UI now reaches the real local API for account/history reads,
 income/expense/transfer entry and refreshed balances.
 
 M01-05's user-facing UX acceptance was explicitly approved by the user. The
-complete API→UI, persistence/reopen and desktop/narrow browser gates are locally
-verified. Implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd` is
-pushed on `codex/m01-05`; PR #6 targets `main`, is conflict-free and exact-SHA
-CI is running. Integration awaits the high-risk review gate. M01-06 has not
-started.
+complete API→UI, persistence/reopen and desktop/narrow browser gates passed.
+Implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd` and status
+commit `1facd75342b2dd5273b330f73a0ae4597c840c83` were delivered on
+`codex/m01-05`. PR #6 merged conflict-free as
+`70bbc052ed8742d164d0b69831ce6324940fa3ab`; exact-head CI run 45540761957 passed
+on Ubuntu and Windows. M01-06 has not started.
 
 | Check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Result |
 | --- | --- |
