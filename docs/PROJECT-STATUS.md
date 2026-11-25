@@ -1,14 +1,17 @@
 # FinPath project status
 
-Updated: 2026-11-03 (America/Toronto).
+Updated: 2026-11-24 (America/Toronto).
 
 ## Current stage
 
-- Task: `M01-04` — Ledger REST endpoints and idempotency. M00-05 and M01-01
-  through M01-03 are integrated.
-- M01-04 state: Locally Verified on `codex/m01-04`; typed ledger endpoints,
-  tenant scoping, atomic writes, idempotency and cursor pagination pass focused tests.
-- M01 milestone: 3 of 6 Steps integrated; M01-04 delivery is pending.
+- Task: `M01-05` — Accounts and transactions UI. M00-05 and M01-01 through
+  M01-04 are integrated.
+- M01-05 state: implementation and required local verification are complete on
+  `codex/m01-05`; commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd` is pushed and
+  [PR #6](https://github.com/guangtian0330/personalFinance/pull/6) is open; its
+  exact-SHA CI is running and high-risk integration review is pending.
+- M01 milestone: 4 of 6 Steps integrated; M01-05 is Delivered and awaits exact-
+  SHA CI plus the high-risk merge gate.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -17,13 +20,14 @@ Updated: 2026-11-03 (America/Toronto).
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Git delivery: M01-03 is integrated through PR #4 with both required CI jobs
-  passing. M01-04 push, PR, exact-SHA CI and merge status are pending.
-- Next task in the authorized M01 sequence: M01-05 after M01-04 integration.
+- Git delivery: M01-04 is integrated through PR #5. Both exact-SHA PR CI jobs
+  passed; merge commit is `085b48dee46d1d37334b073e73b18c558914dce3`.
+- Next task: complete M01-05 exact-SHA CI and integration review; do not start
+  M01-06 before M01-05 is integrated.
 
 ## Permanent progress checklist and full Step status
 
-Updated: 2026-11-03 (America/Toronto). `M00-BOOTSTRAP-000` is complete and is
+Updated: 2026-11-24 (America/Toronto). `M00-BOOTSTRAP-000` is complete and is
 outside the 53 Steps. Status meanings: Pending, In Progress, Blocked, Failed,
 Verified (required local gates), Delivered (verified, committed, pushed and PR
 created), Integrated (merged to main). The exact SHA, PR, push and CI evidence
@@ -33,7 +37,7 @@ SHAs are not written into their own commit.
 | Milestone | Area | Integrated |
 | --- | --- | ---: |
 | M00 | Foundation | 5/5 Integrated |
-| M01 | Ledger | 2/6 Integrated |
+| M01 | Ledger | 4/6 Integrated |
 | M02 | Budget | 0/5 Integrated |
 | M03 | Onboarding | 0/5 Integrated |
 | M04 | Goals | 0/6 Integrated |
@@ -55,8 +59,8 @@ SHAs are not written into their own commit.
 | M01-01 | Money, currencies, scales and rounding | M00-05 | Integrated | PR #2 merged to `main` (2026-11-03), merge commit `9d143f6219f7beac5c8cb30bc7f6f6b3c98d57f7`; Ubuntu + Windows CI passed |
 | M01-02 | Accounts and tenant-aware base schema | M01-01 | Integrated | PR #3 merged to `main` (2026-11-04), merge commit `135c90f50e3b91f823ebc1136bb14164128025b0`; Ubuntu + Windows CI passed |
 | M01-03 | Balanced journal and reversal domain | M01-02 | Integrated | PR #4 merged to `main` (2026-11-03), merge commit `9418fd3b4de0eec4e90362bc86c7f5473a6dce54`; Ubuntu + Windows CI passed |
-| M01-04 | Ledger REST endpoints and idempotency | M01-03 | Verified | `codex/m01-04`; focused SQLite/D1 adapter integration, idempotency, tenant, pagination, int64 and rollback checks pass; awaiting delivery |
-| M01-05 | Accounts and transactions UI | M01-04 | Pending | Not started |
+| M01-04 | Ledger REST endpoints and idempotency | M01-03 | Integrated | [PR #5](https://github.com/guangtian0330/personalFinance/pull/5), commit `a291f8a0dab79c2e1e6eb547df61094ff8b2d157`, merge `085b48dee46d1d37334b073e73b18c558914dce3`; Ubuntu + Windows CI passed |
+| M01-05 | Accounts and transactions UI | M01-04 | Delivered | [PR #6](https://github.com/guangtian0330/personalFinance/pull/6), implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd`, pushed from `codex/m01-05`; local checks pass, exact-SHA CI is running, integration review pending |
 | M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Pending | Not started |
 | M02-01 | Default financial category trees | M01-06 | Pending | Not started |
 | M02-02 | Budget period/version domain | M02-01 | Pending | Not started |
@@ -251,9 +255,60 @@ real financial data was used.
 | `pnpm test:e2e` | Exit 0 after allowing loopback test access; 6/6 existing M00-05 smoke cases passed at desktop and narrow viewports. The default sandbox denied the runner's own `127.0.0.1` health check with `EACCES`; the permitted local retry passed. No test listeners remain on ports 4173, 5173 or 8787. E2E does not exercise the new ledger routes. |
 | Migration generation | Exit 0; Drizzle generated one additive `request_hash` column migration. Fresh and existing-row upgrade cases pass in SQLite. |
 
-M01-04 remains local `Verified` until the task commit is pushed and PR CI for
-that exact SHA passes. Local server wiring to a real D1 database remains outside
-this Step; no deployment or database provisioning was requested.
+M01-04 was locally `Verified` before delivery; its task commit was pushed and
+the exact-SHA PR CI passed, so PR #5 is integrated. Production D1 provisioning
+remains outside M01-05; its explicitly authorized local SQLite API runtime is
+implemented and verified below.
+
+## M01-04 delivery and M01-05 implementation status
+
+M01-04 task commit `a291f8a0dab79c2e1e6eb547df61094ff8b2d157` was pushed on
+`codex/m01-04` and integrated by [PR #5](https://github.com/guangtian0330/personalFinance/pull/5).
+Exact-SHA CI run `41771445504` passed both Ubuntu and Windows jobs. GitHub
+created merge commit `085b48dee46d1d37334b073e73b18c558914dce3`; local `main`
+was fast-forwarded to it before creating `codex/m01-05`.
+
+M01-05's authorized UI slice is implemented locally: typed account, paged
+transaction and create clients; exact minor-unit parsing/formatting for CAD,
+CNY and JPY; balances derived from complete paged posting history; beginner
+forms for income, expense/card purchase and same-currency transfer; friendly
+stable API errors; disabled in-flight submission and retry-stable idempotency
+keys; keyboard and narrow-screen behavior. Posting internals are not presented
+as a journal editor.
+
+The user explicitly expanded M01-05 to include a local persistent SQLite
+runtime and API repository injection. `packages/persistence/src/local-sqlite.ts`
+uses the existing M01-02 and M01-04 migrations, SQLite WAL/FULL durability and
+synthetic CAD demo accounts only when local mock auth is enabled. The default
+database is `.local-data/finpath.sqlite3` (ignored); tests and Playwright use
+isolated temporary database files. The API validates mock-auth settings before
+opening/seeding storage and closes the database on shutdown. This is local-only;
+no cloud database, new migration, production auth behavior or real financial
+data was added. The UI now reaches the real local API for account/history reads,
+income/expense/transfer entry and refreshed balances.
+
+M01-05's user-facing UX acceptance was explicitly approved by the user. The
+complete API→UI, persistence/reopen and desktop/narrow browser gates are locally
+verified. Implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd` is
+pushed on `codex/m01-05`; PR #6 targets `main`, is conflict-free and exact-SHA
+CI is running. Integration awaits the high-risk review gate. M01-06 has not
+started.
+
+| Check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Result |
+| --- | --- |
+| `pnpm install --frozen-lockfile --reporter=append-only` | Passed; lockfile up to date and supply-chain policy passed for 177 entries. |
+| `pnpm format:check` | Passed; 68 files checked. |
+| `pnpm lint` | Passed; 69 files, no warnings. |
+| `pnpm typecheck` | Passed. |
+| `pnpm test` | Passed: 48/48 Node regressions, 34/34 Vitest, 2/2 harness; build passed. |
+| Focused M01-05 client/view Node tests | Passed: 6/6. |
+| Focused local SQLite runtime/API Vitest | Passed: 2/2, including default path, synthetic seed, API write/read and close/reopen persistence. |
+| `pnpm test:e2e` | Passed: 12/12 desktop/narrow cases (6 existing M00-05 + 6 M01-05) against the real SQLite API. Required loopback permission and explicit existing Playwright cache path. |
+| `git diff --check` | Passed. |
+
+Pre-existing untracked Delivery2 documents and ZIP remain excluded from this
+Step. No listener remains on the test ports. The local SQLite database directory
+is ignored and test databases are temporary synthetic fixtures.
 
 ## M00-05 local verification and CI gate
 
