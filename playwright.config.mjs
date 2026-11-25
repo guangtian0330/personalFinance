@@ -1,6 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
-const localEnv = { APP_ENV: 'development', NODE_ENV: 'development', MOCK_AUTH: 'false' };
+const e2eDataDirectory = mkdtempSync(join(tmpdir(), 'finpath-playwright-'));
+process.once('exit', () => rmSync(e2eDataDirectory, { recursive: true, force: true }));
+
+const localEnv = {
+  APP_ENV: 'development',
+  NODE_ENV: 'development',
+  MOCK_AUTH: 'false',
+  FINPATH_SQLITE_PATH: join(e2eDataDirectory, 'foundation.sqlite3'),
+};
 
 export default defineConfig({
   testDir: './tests/e2e',

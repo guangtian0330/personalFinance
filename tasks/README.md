@@ -10,7 +10,11 @@
 | `M00-03` | Integrated | PR #1 merged; implementation checks passed and user approved concrete API contract on 2026-10-31. |
 | `M00-04` | Integrated | PR #1 merged; 48/48 tests, startup rejection and 18/18 live HTTP checks passed. Manual checkpoint WAIVED_BY_USER on 2026-11-01. |
 | `M00-05` | Integrated | [PR #1](https://github.com/guangtian0330/personalFinance/pull/1), merge `844f81f51e2d2353811536bd95628542faedf301`; exact-SHA Ubuntu/Windows CI passed. |
-| `M01-01` | Delivered; CI passed; human merge approval required | `codex/m01-01`, commit `6b7282cec200724a89e89662a2fea14b70d72910`, [PR #2](https://github.com/guangtian0330/personalFinance/pull/2); Ubuntu/Windows CI passed on `e0b9c42`; all local M01-01 checks passed. |
+| `M01-01` | Integrated | [PR #2](https://github.com/guangtian0330/personalFinance/pull/2), merge `9d143f6219f7beac5c8cb30bc7f6f6b3c98d57f7`; Ubuntu/Windows CI passed. |
+| `M01-02` | Integrated | [PR #3](https://github.com/guangtian0330/personalFinance/pull/3), merge `135c90f50e3b91f823ebc1136bb14164128025b0`; Ubuntu/Windows CI passed. |
+| `M01-03` | Integrated | [PR #4](https://github.com/guangtian0330/personalFinance/pull/4), merge `9418fd3b4de0eec4e90362bc86c7f5473a6dce54`; Ubuntu/Windows CI passed. |
+| `M01-04` | Integrated | `codex/m01-04`, commit `a291f8a0dab79c2e1e6eb547df61094ff8b2d157`, [PR #5](https://github.com/guangtian0330/personalFinance/pull/5), merge `085b48dee46d1d37334b073e73b18c558914dce3`; exact-SHA Ubuntu/Windows CI passed. |
+| `M01-05` | Verified | `codex/m01-05`; local persistent SQLite repository is injected into the dev API; full suite and real API/UI E2E pass (12/12 desktop/narrow). Commit, push, PR and exact-SHA CI are pending; M01-05 UX acceptance was approved by the user. |
 
 The user designated [Delivery2's task index](../.ai/FinPath_Delivery2_v1/tasks/INDEX.md)
 as the source of task order and dependencies. Execute only the explicitly

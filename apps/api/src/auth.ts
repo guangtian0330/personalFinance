@@ -42,6 +42,7 @@ const localOrigins = new Set([
   'http://127.0.0.1:8787',
   'http://127.0.0.1:5173',
   'http://127.0.0.1:4173',
+  'http://127.0.0.1:8788',
 ]);
 
 export function assertLocalMockRequest(request: Request): void {
