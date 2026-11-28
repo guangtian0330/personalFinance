@@ -5,10 +5,10 @@ Updated: 2026-11-27 (America/Toronto).
 ## Current stage
 
 - Task: `M01-06` — Ledger reconciliation and currency regression suite.
-  M00-05 and M01-01 through M01-05 are integrated.
+  M00-05 and M01-01 through M01-06 are integrated.
 - M01-05 state: Integrated through [PR #6](https://github.com/guangtian0330/personalFinance/pull/6),
   merge commit `70bbc052ed8742d164d0b69831ce6324940fa3ab`.
-- M01 milestone: 5 of 6 Steps integrated; M01-06 is locally verified.
+- M01 milestone: All 6 Steps are integrated.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -17,8 +17,9 @@ Updated: 2026-11-27 (America/Toronto).
 - Specification source and task order: `.ai/FinPath_Delivery2_v1/`, as designated
   by the user. Step source links are relative to that directory. This delivery
   remains a proposed baseline except for the explicitly authorized current work.
-- Git delivery: M01-05 is integrated through PR #6 after exact-head CI passed
-  on Ubuntu and Windows; merge commit is recorded above.
+- Git delivery: M01-06 merged through [PR #9](https://github.com/guangtian0330/personalFinance/pull/9)
+  as `0cb5b8eac0a3496ff9eae31a39efb406e086fa3d` after the independent review and
+  exact-head Ubuntu and Windows CI passed.
 - Next task in sequence: M02-01 remains unstarted.
 
 ## Permanent progress checklist and full Step status
@@ -57,7 +58,7 @@ SHAs are not written into their own commit.
 | M01-03 | Balanced journal and reversal domain | M01-02 | Integrated | PR #4 merged to `main` (2026-11-03), merge commit `9418fd3b4de0eec4e90362bc86c7f5473a6dce54`; Ubuntu + Windows CI passed |
 | M01-04 | Ledger REST endpoints and idempotency | M01-03 | Integrated | [PR #5](https://github.com/guangtian0330/personalFinance/pull/5), commit `a291f8a0dab79c2e1e6eb547df61094ff8b2d157`, merge `085b48dee46d1d37334b073e73b18c558914dce3`; Ubuntu + Windows CI passed |
 | M01-05 | Accounts and transactions UI | M01-04 | Integrated | [PR #6](https://github.com/guangtian0330/personalFinance/pull/6), implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd`, status commit `1facd75342b2dd5273b330f73a0ae4597c840c83`, merge commit `70bbc052ed8742d164d0b69831ce6324940fa3ab`; exact-SHA CI run 45540761957 passed Ubuntu and Windows |
-| M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Verified | Synthetic IT-001 ledger subset and currency boundaries; independent review passed, remote CI pending delivery |
+| M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Integrated | [PR #9](https://github.com/guangtian0330/personalFinance/pull/9), task commit `126fc48219f1e231fb7359e713c27e72e93e8242`, merge `0cb5b8eac0a3496ff9eae31a39efb406e086fa3d`; [exact-head Ubuntu and Windows CI](https://github.com/guangtian0330/personalFinance/actions/runs/46099733443) and independent review passed |
 | M02-01 | Default financial category trees | M01-06 | Pending | Not started |
 | M02-02 | Budget period/version domain | M02-01 | Pending | Not started |
 | M02-03 | Budget actual and variance query | M02-02 | Pending | Not started |
@@ -287,6 +288,11 @@ implemented and verified below.
   gained full account assertions and a missing-loan-credit rejection case. The
   reviewer approved the synthetic fixture and reported no remaining findings.
   Under the user's rule, the passed subtask satisfies the manual review gate.
+- [PR #9](https://github.com/guangtian0330/personalFinance/pull/9) merged to
+  `main` on 2026-11-27. Both `verify (ubuntu-latest)` and
+  `verify (windows-latest)` passed in [CI run 46099733443](https://github.com/guangtian0330/personalFinance/actions/runs/46099733443)
+  for PR head `126fc48219f1e231fb7359e713c27e72e93e8242`. The merge commit is
+  `0cb5b8eac0a3496ff9eae31a39efb406e086fa3d`.
 
 ## M01-04 delivery and M01-05 implementation status
 

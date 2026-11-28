@@ -15,7 +15,7 @@
 | `M01-03` | Integrated | [PR #4](https://github.com/guangtian0330/personalFinance/pull/4), merge `9418fd3b4de0eec4e90362bc86c7f5473a6dce54`; Ubuntu/Windows CI passed. |
 | `M01-04` | Integrated | `codex/m01-04`, commit `a291f8a0dab79c2e1e6eb547df61094ff8b2d157`, [PR #5](https://github.com/guangtian0330/personalFinance/pull/5), merge `085b48dee46d1d37334b073e73b18c558914dce3`; exact-SHA Ubuntu/Windows CI passed. |
 | `M01-05` | Integrated | `codex/m01-05`, implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd`, [PR #6](https://github.com/guangtian0330/personalFinance/pull/6), merge `70bbc052ed8742d164d0b69831ce6324940fa3ab`; exact-head Ubuntu/Windows CI passed. |
-| `M01-06` | Verified | `codex/m01-06`; synthetic IT-001 ledger subset, SQLite replay and currency boundaries. Independent review passed; remote CI pending delivery. |
+| `M01-06` | Integrated | `codex/m01-06`, task commit `126fc48219f1e231fb7359e713c27e72e93e8242`, [PR #9](https://github.com/guangtian0330/personalFinance/pull/9), merge `0cb5b8eac0a3496ff9eae31a39efb406e086fa3d`; [exact-head Ubuntu/Windows CI](https://github.com/guangtian0330/personalFinance/actions/runs/46099733443) and independent review passed. |
 
 The user designated [Delivery2's task index](../.ai/FinPath_Delivery2_v1/tasks/INDEX.md)
 as the source of task order and dependencies. Execute only the explicitly
