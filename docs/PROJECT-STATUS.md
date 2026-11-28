@@ -1,14 +1,14 @@
 # FinPath project status
 
-Updated: 2026-11-24 (America/Toronto).
+Updated: 2026-11-27 (America/Toronto).
 
 ## Current stage
 
-- Task: `M01-05` — Accounts and transactions UI. M00-05 and M01-01 through
-  M01-05 are integrated.
+- Task: `M01-06` — Ledger reconciliation and currency regression suite.
+  M00-05 and M01-01 through M01-05 are integrated.
 - M01-05 state: Integrated through [PR #6](https://github.com/guangtian0330/personalFinance/pull/6),
   merge commit `70bbc052ed8742d164d0b69831ce6324940fa3ab`.
-- M01 milestone: 5 of 6 Steps integrated; M01-06 has not started.
+- M01 milestone: 5 of 6 Steps integrated; M01-06 is locally verified.
 - Prerequisite: M00-04 verified and delivered as
   `ddddf52ce623e5fa3f6dcef8bb6207037105da44` to
   `origin/codex/m00-04-auth-boundary` on 2026-11-02. Local, upstream and
@@ -19,7 +19,7 @@ Updated: 2026-11-24 (America/Toronto).
   remains a proposed baseline except for the explicitly authorized current work.
 - Git delivery: M01-05 is integrated through PR #6 after exact-head CI passed
   on Ubuntu and Windows; merge commit is recorded above.
-- Next task: M01-06 is next in the delivery sequence and remains unstarted.
+- Next task in sequence: M02-01 remains unstarted.
 
 ## Permanent progress checklist and full Step status
 
@@ -57,7 +57,7 @@ SHAs are not written into their own commit.
 | M01-03 | Balanced journal and reversal domain | M01-02 | Integrated | PR #4 merged to `main` (2026-11-03), merge commit `9418fd3b4de0eec4e90362bc86c7f5473a6dce54`; Ubuntu + Windows CI passed |
 | M01-04 | Ledger REST endpoints and idempotency | M01-03 | Integrated | [PR #5](https://github.com/guangtian0330/personalFinance/pull/5), commit `a291f8a0dab79c2e1e6eb547df61094ff8b2d157`, merge `085b48dee46d1d37334b073e73b18c558914dce3`; Ubuntu + Windows CI passed |
 | M01-05 | Accounts and transactions UI | M01-04 | Integrated | [PR #6](https://github.com/guangtian0330/personalFinance/pull/6), implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd`, status commit `1facd75342b2dd5273b330f73a0ae4597c840c83`, merge commit `70bbc052ed8742d164d0b69831ce6324940fa3ab`; exact-SHA CI run 45540761957 passed Ubuntu and Windows |
-| M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Pending | Not started |
+| M01-06 | Ledger reconciliation and currency regression suite | M01-05 | Verified | Synthetic IT-001 ledger subset and currency boundaries; independent review passed, remote CI pending delivery |
 | M02-01 | Default financial category trees | M01-06 | Pending | Not started |
 | M02-02 | Budget period/version domain | M02-01 | Pending | Not started |
 | M02-03 | Budget actual and variance query | M02-02 | Pending | Not started |
@@ -256,6 +256,38 @@ the exact-SHA PR CI passed, so PR #5 is integrated. Production D1 provisioning
 remains outside M01-05; its explicitly authorized local SQLite API runtime is
 implemented and verified below.
 
+## M01-06 ledger reconciliation evidence
+
+- Branch `codex/m01-06` starts at `1e97e3bebc9772500f6cb9640a604703e87db9d9`
+  (PR #7 merge). IT-001 is partial and covers the ledger slice.
+- The synthetic opening journal balances CAD 10,000 checking, CAD 1,000
+  loan liability and JPY 100 cash against equity. The card and other accounts
+  open at zero. The test replays SQLite-backed postings returned by the HTTP
+  transaction list, checks every journal by currency, and reopens the database.
+- The fixture verifies that the CAD 2,000 transfer and CAD 100 card settlement
+  preserve net worth, that the CAD 300 purchase less CAD 30 refund yields CAD 270
+  grocery expense, and that CAD 450 loan principal reduces debt while CAD 50
+  interest reduces net worth. The linked reversal restores pre-payment balances.
+  Concurrent and reopened retries preserve the original journal, and a changed
+  amount with the same key is rejected.
+- Native net worth reconciles to CAD 8,730 and JPY 100 separately. Cross-currency
+  transfer execution is deferred to P1. The suite checks that the transfer is
+  rejected without a journal and only exercises the existing conversion primitive
+  with a synthetic ratio. It also checks transport and replay of SQLite's maximum
+  signed integer and rejects invalid precision and overflow.
+- Cloud Linux x86-64, Node 24.22.3, pnpm 11.25.0. From the repository root,
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck` and `pnpm test` passed
+  (48 regression, 38 Vitest including four M01-06 cases, and 2 harness tests).
+  The six retained M01-05 ledger client/view Node tests also passed.
+- Playwright's Chromium download returned HTTP 403 in cloud Linux. The full live
+  desktop and narrow E2E suite passed 12/12 with system Chromium 156 via
+  `pnpm test:e2e --config /workspace/.finpath-toolchain/playwright.system.config.mjs`.
+  Windows verification is tracked through GitHub Actions.
+- Independent M01-06 code review passed on 2026-11-27 after the opening fixture
+  gained full account assertions and a missing-loan-credit rejection case. The
+  reviewer approved the synthetic fixture and reported no remaining findings.
+  Under the user's rule, the passed subtask satisfies the manual review gate.
+
 ## M01-04 delivery and M01-05 implementation status
 
 M01-04 task commit `a291f8a0dab79c2e1e6eb547df61094ff8b2d157` was pushed on
@@ -289,7 +321,7 @@ Implementation commit `82eb2e845dc6fc84978bd5b24d12ae4086e6b5fd` and status
 commit `1facd75342b2dd5273b330f73a0ae4597c840c83` were delivered on
 `codex/m01-05`. PR #6 merged conflict-free as
 `70bbc052ed8742d164d0b69831ce6324940fa3ab`; exact-head CI run 45540761957 passed
-on Ubuntu and Windows. M01-06 has not started.
+on Ubuntu and Windows.
 
 | Check (Windows PowerShell, Node 24.22.1, pnpm 11.25.0) | Result |
 | --- | --- |
